@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 from contextlib import suppress
 from random import choice
+from pathlib import Path
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -14,8 +15,7 @@ import os
 os.chdir(sys._MEIPASS)
 
 config = ConfigParser()
-config.read('config.ini')
-filename = config.get('config', 'data_file')
+filename = Path.home() / '.local/share/password_generator/config.ini'
 config.read(filename)
 
 parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it')
