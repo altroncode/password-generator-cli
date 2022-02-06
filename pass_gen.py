@@ -12,8 +12,6 @@ import sys
 import os
 
 
-os.chdir(sys._MEIPASS)
-
 config = ConfigParser()
 filename = Path.home() / '.local/share/password_generator/config.ini'
 config.read(filename)
@@ -25,18 +23,23 @@ parser.add_argument('--email', '-e', type=str, dest='email',
                     default=config.get('config', 'email'), nargs='?')
 parser.add_argument('--username', '-u', type=str, dest='username', default='-', nargs='?')
 parser.add_argument('--telegram', '-tg', type=str, dest='telegram', nargs='?')
+parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
 parser.add_argument('--note', '-n', action='store_true', dest='note')
-
+parser.add_argument('--symbols', '-s', type=str, dest='symbols', default='dlp', nargs='?')
 arguments = parser.parse_args()
-
-symbols = f'{string.digits}{string.ascii_letters}{string.punctuation}'
 
 
 def generate_password(length: int) -> str:
+    symbols = (
+        f'{string.digits if "d" in arguments.symbols else ""}'
+        f'{string.ascii_letters if "l" in arguments.symbols else ""}'
+        f'{string.punctuation if "p" in arguments.symbols else ""}'
+    )
+
     return str().join(choice(symbols) for _ in range(length))
 
 
-password = generate_password(length=arguments.length)
+password = arguments.password or generate_password(length=arguments.length)
 print(password)
 
 
