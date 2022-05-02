@@ -8,8 +8,6 @@ import urllib.error
 import argparse
 import string
 import json
-import sys
-import os
 
 
 config = ConfigParser()
@@ -60,13 +58,13 @@ def generate_message() -> str:
 
 
 def generate_note() -> str:
-    note = str()
+    note = []
     print()
-    line = f'{input("Note: ")}'
+    line = input("Note: ")
     while line:
-        note += f'{line}\n'
+        note.append(line)
         line = input()
-    return note
+    return '\n'.join(note)
 
 
 def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
