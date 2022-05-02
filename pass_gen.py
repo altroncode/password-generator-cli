@@ -9,11 +9,12 @@ import random
 import string
 import enum
 import json
+import os
 
 
 config = configparser.ConfigParser()
-filename = pathlib.Path.home() / '.local/share/password_generator/config.ini'
-config.read(filename)
+config_path = pathlib.Path(os.curdir) / 'config.ini'
+config.read(config_path)
 
 parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it to telegram')
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
@@ -86,7 +87,7 @@ def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
     data = {
         "text": text,
         "parse_mode": "MarkdownV2",
-        "chat_id": chat_id,
+        "chat_id": chat_id
     }
     return urllib.parse.urlencode(data | kwargs).encode("utf-8")
 
@@ -110,10 +111,10 @@ if arguments.telegram != 'False':
 
         config.set('config', 'last_message_id', str(json.loads(response.read())['result']['message_id']))
 
-        with open(filename, 'w') as configfile:
-            config.write(configfile)
+        with open(config_path, 'w') as config_file:
+            config.write(config_file)
 
     except urllib.error.HTTPError:
-        print(color_text(Colors.ERROR, 'Something went wrong!!!'))
+        print(color_text(Colors.ERROR.color, 'Something went wrong!!!'))
     else:
-        print(color_text(Colors.SUCCESS, 'Success!'))
+        print(color_text(Colors.SUCCESS.color, 'Success!'))
