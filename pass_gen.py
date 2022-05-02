@@ -1,20 +1,21 @@
-from configparser import ConfigParser
-from contextlib import suppress
-from random import choice
-from pathlib import Path
 import urllib.request
 import urllib.parse
 import urllib.error
+import configparser
+import contextlib
 import argparse
+import pathlib
+import random
 import string
+import enum
 import json
 
 
-config = ConfigParser()
-filename = Path.home() / '.local/share/password_generator/config.ini'
+config = configparser.ConfigParser()
+filename = pathlib.Path.home() / '.local/share/password_generator/config.ini'
 config.read(filename)
 
-parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it')
+parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it to telegram')
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
 parser.add_argument('--platform', '-p', type=str, dest='platform', default='-', nargs='?')
 parser.add_argument('--email', '-e', type=str, dest='email',
@@ -27,6 +28,20 @@ parser.add_argument('--symbols', '-s', type=str, dest='symbols', default='dlp', 
 arguments = parser.parse_args()
 
 
+class Colors(enum.Enum):
+    ERROR = ('\033[32m', '\033[92m')
+    INFO = '\033[91m'
+    SUCCESS = ('\033[33m', '\033[93m')
+    WARNING = ('\033[34m', '\033[94m')
+
+    def __init__(self, *args):
+        self.color = random.choice(args)
+
+
+def color_text(color: str, text: str):
+    return f'{color}{text}\x1b[0m'
+
+
 def generate_password(length: int) -> str:
     symbols = (
         f'{string.digits if "d" in arguments.symbols else ""}'
@@ -34,7 +49,7 @@ def generate_password(length: int) -> str:
         f'{string.punctuation if "p" in arguments.symbols else ""}'
     )
 
-    return str().join(choice(symbols) for _ in range(length))
+    return str().join(random.choice(symbols) for _ in range(length))
 
 
 password = arguments.password or generate_password(length=arguments.length)
@@ -87,7 +102,7 @@ if arguments.telegram != 'False':
     delete_message_url = f'{url}/deleteMessage'
 
     try:
-        with suppress(urllib.error.URLError):
+        with contextlib.suppress(urllib.error.URLError):
             urllib.request.urlopen(delete_message_url, prepare_data(user_id, message_id=message_id))
         urllib.request.urlopen(send_message_url, prepare_data(user_id, generate_message()))
         urllib.request.urlopen(send_message_url, prepare_data(user_id, f'`{escape_message(password)}`'))
@@ -99,4 +114,6 @@ if arguments.telegram != 'False':
             config.write(configfile)
 
     except urllib.error.HTTPError:
-        print('\033[91m' + 'Something went wrong!!!')
+        print(color_text(Colors.ERROR, 'Something went wrong!!!'))
+    else:
+        print(color_text(Colors.SUCCESS, 'Success!'))
