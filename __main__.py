@@ -5,7 +5,7 @@ import configparser
 import contextlib
 import argparse
 import pathlib
-import random
+import secrets
 import string
 import enum
 import json
@@ -14,7 +14,7 @@ import os
 
 config = configparser.ConfigParser()
 config_path = pathlib.Path(os.curdir) / 'config.ini'
-config.read(config_path)
+config.read(config_path)    
 
 parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it to telegram')
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
@@ -36,7 +36,7 @@ class Colors(enum.Enum):
     WARNING = ('\033[34m', '\033[94m')
 
     def __init__(self, *args):
-        self.color = random.choice(args)
+        self.color = secrets.choice(args)
 
 
 def color_text(color: str, text: str):
@@ -50,7 +50,7 @@ def generate_password(length: int) -> str:
         f'{string.punctuation if "p" in arguments.symbols else ""}'
     )
 
-    return str().join(random.choice(symbols) for _ in range(length))
+    return str().join(secrets.choice(symbols) for _ in range(length))
 
 
 password = arguments.password or generate_password(length=arguments.length)
