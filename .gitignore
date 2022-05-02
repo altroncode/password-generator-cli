@@ -10,7 +10,7 @@ __pycache__/
 #IDE
 .idea/
 
-#Developing
+# Developing
 test.py
 
 # Distribution / packaging
