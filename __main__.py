@@ -22,7 +22,7 @@ parser.add_argument('--platform', '-p', type=str, dest='platform', default='-', 
 parser.add_argument('--email', '-e', type=str, dest='email',
                     default=config.get('config', 'email'), nargs='?')
 parser.add_argument('--username', '-u', type=str, dest='username', default='-', nargs='?')
-parser.add_argument('--telegram', '-tg', type=str, dest='telegram', nargs='?')
+parser.add_argument('--send', type=str, dest='send', default='telegram', nargs='?')
 parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
 parser.add_argument('--note', '-n', action='store_true', dest='note')
 parser.add_argument('--symbols', '-s', type=str, dest='symbols', default='dlp', nargs='?')
@@ -92,7 +92,7 @@ def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
     return urllib.parse.urlencode(data | kwargs).encode("utf-8")
 
 
-if arguments.telegram != 'False':
+if arguments.telegram == 'telegram':
 
     user_id = int(config.get('config', 'user_id'))
     tg_bot_token = config.get('config', 'tg_bot_token')
