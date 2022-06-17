@@ -1,15 +1,16 @@
-import urllib.request
-import urllib.parse
-import urllib.error
+import argparse
 import configparser
 import contextlib
-import argparse
+import json
+import os
 import pathlib
 import secrets
 import string
-import enum
-import json
-import os
+import urllib.error
+import urllib.parse
+import urllib.request
+
+import color
 
 
 config = configparser.ConfigParser()
@@ -27,20 +28,6 @@ parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
 parser.add_argument('--note', '-n', action='store_true', dest='note')
 parser.add_argument('--symbols', '-s', type=str, dest='symbols', default='dlp', nargs='?')
 arguments = parser.parse_args()
-
-
-class Colors(enum.Enum, str):
-    ERROR = '\033[31m', '\033[91m'
-    SUCCESS = '\033[32m', '\033[92m'
-    WARNING = '\033[33m', '\033[93m'
-    INFO = '\033[34m', '\033[94m'
-
-    def __str__(self):
-        return secrets.choice(self.value)
-
-
-def color_text(color: str, text: str):
-    return f'{color}{text}\x1b[0m'
 
 
 def generate_password(length: int) -> str:
@@ -115,6 +102,6 @@ if arguments.telegram == 'telegram':
             config.write(config_file)
 
     except urllib.error.HTTPError:
-        print(color_text(Colors.ERROR, 'Something went wrong!!!'))
+        print(color.color_text(color.Colors.ERROR, 'Something went wrong!!!'))
     else:
-        print(color_text(Colors.SUCCESS, 'Success!'))
+        print(color.color_text(color.Colors.SUCCESS, 'Success!'))
