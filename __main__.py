@@ -1,9 +1,6 @@
 import argparse
-import configparser
 import contextlib
 import json
-import os
-import pathlib
 import secrets
 import string
 import urllib.error
@@ -11,17 +8,14 @@ import urllib.parse
 import urllib.request
 
 import color
+import config
 
-
-config = configparser.ConfigParser()
-config_path = pathlib.Path(os.curdir) / 'config.ini'
-config.read(config_path)    
 
 parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it to telegram')
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
 parser.add_argument('--platform', '-p', type=str, dest='platform', default='-', nargs='?')
 parser.add_argument('--email', '-e', type=str, dest='email',
-                    default=config.get('config', 'email'), nargs='?')
+                    default=config.config.get('config', 'email'), nargs='?')
 parser.add_argument('--username', '-u', type=str, dest='username', default='-', nargs='?')
 parser.add_argument('--send', type=str, dest='send', default='telegram', nargs='?')
 parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
@@ -81,9 +75,9 @@ def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
 
 if arguments.telegram == 'telegram':
 
-    user_id = int(config.get('config', 'user_id'))
-    tg_bot_token = config.get('config', 'tg_bot_token')
-    message_id = int(config.get('config', 'last_message_id'))
+    user_id = int(config.config.get('config', 'user_id'))
+    tg_bot_token = config.config.get('config', 'tg_bot_token')
+    message_id = int(config.config.get('config', 'last_message_id'))
 
     url = f'https://api.telegram.org/bot{tg_bot_token}'
     send_message_url = f'{url}/sendMessage'
@@ -96,10 +90,10 @@ if arguments.telegram == 'telegram':
         urllib.request.urlopen(send_message_url, prepare_data(user_id, f'`{escape_message(password)}`'))
         response = urllib.request.urlopen(send_message_url, prepare_data(user_id, f'`{"*" * 42}`'))
 
-        config.set('config', 'last_message_id', str(json.loads(response.read())['result']['message_id']))
+        config.config.set('config', 'last_message_id', str(json.loads(response.read())['result']['message_id']))
 
-        with open(config_path, 'w') as config_file:
-            config.write(config_file)
+        with open(config.config_path, 'w') as config_file:
+            config.config.write(config_file)
 
     except urllib.error.HTTPError:
         print(color.color_text(color.Colors.ERROR, 'Something went wrong!!!'))
