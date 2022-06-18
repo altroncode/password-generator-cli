@@ -8,12 +8,11 @@ config_path = pathlib.Path(os.curdir) / 'config.ini'
 config.read(config_path)
 
 
-class PasswordGeneratorSettings:
+class PasswordGeneratorData:
     email = config.get('password_generator', 'email')
 
 
-class TelegramSettings:
+class TelegramData:
     user_id = int(config.get('telegram', 'user_id'))
     token = config.get('telegram', 'token')
     message_id = int(config.get('telegram', 'last_message_id'))
-
