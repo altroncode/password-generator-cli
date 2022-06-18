@@ -10,12 +10,11 @@ import urllib.request
 import color
 import config
 
-
 parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it to telegram')
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
 parser.add_argument('--platform', '-p', type=str, dest='platform', default='-', nargs='?')
 parser.add_argument('--email', '-e', type=str, dest='email',
-                    default=config.config.get('config', 'email'), nargs='?')
+                    default=config.PasswordGeneratorSettings.email)
 parser.add_argument('--username', '-u', type=str, dest='username', default='-', nargs='?')
 parser.add_argument('--send', type=str, dest='send', default='telegram', nargs='?')
 parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
@@ -75,20 +74,19 @@ def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
 
 if arguments.telegram == 'telegram':
 
-    user_id = int(config.config.get('config', 'user_id'))
-    tg_bot_token = config.config.get('config', 'tg_bot_token')
-    message_id = int(config.config.get('config', 'last_message_id'))
-
-    url = f'https://api.telegram.org/bot{tg_bot_token}'
+    url = f'https://api.telegram.org/bot{config.TelegramSettings.token}'
     send_message_url = f'{url}/sendMessage'
     delete_message_url = f'{url}/deleteMessage'
 
     try:
         with contextlib.suppress(urllib.error.URLError):
-            urllib.request.urlopen(delete_message_url, prepare_data(user_id, message_id=message_id))
-        urllib.request.urlopen(send_message_url, prepare_data(user_id, generate_message()))
-        urllib.request.urlopen(send_message_url, prepare_data(user_id, f'`{escape_message(password)}`'))
-        response = urllib.request.urlopen(send_message_url, prepare_data(user_id, f'`{"*" * 42}`'))
+            urllib.request.urlopen(delete_message_url, prepare_data(config.TelegramSettings.user_id,
+                                                                    message_id=config.TelegramSettings.message_id))
+        urllib.request.urlopen(send_message_url, prepare_data(config.TelegramSettings.user_id, generate_message()))
+        urllib.request.urlopen(send_message_url, prepare_data(config.TelegramSettings.user_id,
+                                                              f'`{escape_message(password)}`'))
+        response = urllib.request.urlopen(send_message_url, prepare_data(config.TelegramSettings.user_id,
+                                                                         f'`{"*" * 42}`'))
 
         config.config.set('config', 'last_message_id', str(json.loads(response.read())['result']['message_id']))
 
