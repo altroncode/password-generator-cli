@@ -14,6 +14,6 @@ class PasswordGeneratorSettings:
 
 class TelegramSettings:
     user_id = int(config.get('telegram', 'user_id'))
-    token = config.get('telegram', 'tg_bot_token')
+    token = config.get('telegram', 'token')
     message_id = int(config.get('telegram', 'last_message_id'))
 
