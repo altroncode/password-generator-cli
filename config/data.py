@@ -15,4 +15,4 @@ class PasswordGeneratorData:
 class TelegramData:
     user_id = int(config.get('telegram', 'user_id'))
     token = config.get('telegram', 'token')
-    message_id = int(config.get('telegram', 'last_message_id'))
+    last_message_id = int(config.get('telegram', 'last_message_id'))
