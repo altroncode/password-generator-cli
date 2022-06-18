@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(prog='password_generator', description='Generat
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
 parser.add_argument('--platform', '-p', type=str, dest='platform', default='-', nargs='?')
 parser.add_argument('--email', '-e', type=str, dest='email',
-                    default=config.PasswordGeneratorSettings.email)
+                    default=config.data.PasswordGeneratorData.email)
 parser.add_argument('--username', '-u', type=str, dest='username', default='-', nargs='?')
 parser.add_argument('--send', type=str, dest='send', default='telegram', nargs='?')
 parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
@@ -74,24 +74,25 @@ def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
 
 if arguments.telegram == 'telegram':
 
-    url = f'https://api.telegram.org/bot{config.TelegramSettings.token}'
+    url = f'https://api.telegram.org/bot{config.data.TelegramData.token}'
     send_message_url = f'{url}/sendMessage'
     delete_message_url = f'{url}/deleteMessage'
 
     try:
         with contextlib.suppress(urllib.error.URLError):
-            urllib.request.urlopen(delete_message_url, prepare_data(config.TelegramSettings.user_id,
-                                                                    message_id=config.TelegramSettings.message_id))
-        urllib.request.urlopen(send_message_url, prepare_data(config.TelegramSettings.user_id, generate_message()))
-        urllib.request.urlopen(send_message_url, prepare_data(config.TelegramSettings.user_id,
+            urllib.request.urlopen(delete_message_url, prepare_data(
+                config.data.TelegramData.user_id,
+                message_id=config.data.TelegramData.last_message_id))
+        urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id, generate_message()))
+        urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id,
                                                               f'`{escape_message(password)}`'))
-        response = urllib.request.urlopen(send_message_url, prepare_data(config.TelegramSettings.user_id,
+        response = urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id,
                                                                          f'`{"*" * 42}`'))
 
-        config.config.set('config', 'last_message_id', str(json.loads(response.read())['result']['message_id']))
+        config.data.config.set('config', 'last_message_id', str(json.loads(response.read())['result']['message_id']))
 
-        with open(config.config_path, 'w') as config_file:
-            config.config.write(config_file)
+        with open(config.data.config_path, 'w') as config_file:
+            config.data.config.write(config_file)
 
     except urllib.error.HTTPError:
         print(color.color_text(color.Colors.ERROR, 'Something went wrong!!!'))
