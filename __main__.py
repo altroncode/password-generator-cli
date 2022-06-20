@@ -35,19 +35,19 @@ def escape_message(message: str) -> str:
     return str().join([f'\\{i}' for i in message])
 
 
-def generate_message() -> str:
+def create_message() -> str:
     message = f'*Platform*: {escape_message(arguments.platform)}\n' \
               f'*Email*: {escape_message(arguments.email)}\n' \
               f'*Username*: {escape_message(arguments.username)}\n'
 
     if arguments.note:
-        note = generate_note()
+        note = create_note()
         return f'{message}*Note*: {note}' if note else message
 
     return message
 
 
-def generate_note() -> str:
+def create_note() -> str:
     note = []
     print()
     line = input("Note: ")
@@ -77,7 +77,7 @@ if arguments.telegram == 'telegram':
             urllib.request.urlopen(delete_message_url, prepare_data(
                 config.data.TelegramData.user_id,
                 message_id=config.data.TelegramData.last_message_id))
-        urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id, generate_message()))
+        urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id, create_message()))
         urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id,
                                                               f'`{escape_message(password)}`'))
         response = urllib.request.urlopen(send_message_url, prepare_data(config.data.TelegramData.user_id,
