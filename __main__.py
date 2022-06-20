@@ -1,14 +1,13 @@
 import argparse
 import contextlib
 import json
-import secrets
-import string
 import urllib.error
 import urllib.parse
 import urllib.request
 
 import color
 import config
+import password
 
 parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and send it to telegram')
 parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
@@ -22,18 +21,13 @@ parser.add_argument('--note', '-n', action='store_true', dest='note')
 parser.add_argument('--symbols', '-s', type=str, dest='symbols', default='dlp', nargs='?')
 arguments = parser.parse_args()
 
+password = arguments.password or password.Password(
+    length=arguments.length,
+    is_digit='d' in arguments.symbols,
+    is_letter='l' in arguments.symbols,
+    is_punctuation='p' in arguments.symbols
+)
 
-def generate_password(length: int) -> str:
-    symbols = (
-        f'{string.digits if "d" in arguments.symbols else ""}'
-        f'{string.ascii_letters if "l" in arguments.symbols else ""}'
-        f'{string.punctuation if "p" in arguments.symbols else ""}'
-    )
-
-    return str().join(secrets.choice(symbols) for _ in range(length))
-
-
-password = arguments.password or generate_password(length=arguments.length)
 print(password)
 
 
