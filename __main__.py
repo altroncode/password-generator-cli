@@ -74,7 +74,7 @@ def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
     return urllib.parse.urlencode(data | kwargs).encode("utf-8")
 
 
-if arguments.telegram == 'telegram':
+if arguments.send == 'telegram':
 
     telegram_data = config.data.TelegramData()
     url = f'https://api.telegram.org/bot{telegram_data.token}'
