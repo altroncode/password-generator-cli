@@ -1,8 +1,8 @@
 """Module for managing dynamic app data"""
 
 import configparser
-import os
 import pathlib
+import os
 
 
 class PasswordGeneratorData:
@@ -12,8 +12,17 @@ class PasswordGeneratorData:
     config_path = pathlib.Path(os.curdir) / 'config.ini'
     config.read(config_path)
 
-    def __init__(self):
-        self.email = self.config.get('password_generator', 'email')
+    @property
+    def email(self):
+        return self.config.get('password_generator', 'email')
+
+    @email.setter
+    def email(self, value):
+        self.config.set('password_generator', 'email', value)
+
+    def save(self):
+        with open(self.config_path, 'w') as file:
+            self.config.write(file)
 
 
 class TelegramData:
@@ -23,7 +32,30 @@ class TelegramData:
     config_path = pathlib.Path(os.curdir) / 'config.ini'
     config.read(config_path)
 
-    def __init__(self):
-        self.user_id = int(self.config.get('telegram', 'user_id'))
-        self.token = self.config.get('telegram', 'token')
-        self.last_message_id = int(self.config.get('telegram', 'last_message_id'))
+    @property
+    def user_id(self) -> int:
+        return int(self.config.get('telegram', 'user_id'))
+
+    @user_id.setter
+    def user_id(self, value: str):
+        self.config.set('telegram', 'user_id', value)
+
+    @property
+    def token(self) -> str:
+        return self.config.get('telegram', 'token')
+
+    @token.setter
+    def token(self, value: str):
+        self.config.set('telegram', 'token', value)
+
+    @property
+    def last_message_id(self) -> int:
+        return int(self.config.get('telegram', 'last_message_id'))
+
+    @last_message_id.setter
+    def last_message_id(self, value: str):
+        self.config.set('telegram', 'last_message_id', value)
+
+    def save(self):
+        with open(self.config_path, 'w') as file:
+            self.config.write(file)
