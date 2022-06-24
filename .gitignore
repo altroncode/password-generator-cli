@@ -10,6 +10,9 @@ __pycache__/
 #IDE
 .idea/
 
+#Configuration
+.env
+
 # Developing
 test.py
 
@@ -112,7 +115,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
