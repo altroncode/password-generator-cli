@@ -40,7 +40,7 @@ print(password)
 
 
 def escape_message(message: str) -> str:
-    return str().join([f'\\{i}' for i in message])
+    return "".join([f'\\{i}' for i in message])
 
 
 def create_message() -> str:
@@ -65,7 +65,7 @@ def create_note() -> str:
     return '\n'.join(note)
 
 
-def prepare_data(chat_id: int, text: str = str(), **kwargs) -> bytes:
+def prepare_data(chat_id: int, text: str = "", **kwargs) -> bytes:
     data = {
         "text": text,
         "parse_mode": "MarkdownV2",

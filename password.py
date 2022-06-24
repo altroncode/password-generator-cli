@@ -21,7 +21,7 @@ class Password:
 
     def create_password(self) -> str:
         symbols = self._get_symbols()
-        return str().join(secrets.choice(symbols) for _ in range(self._settings.default_length))
+        return "".join(secrets.choice(symbols) for _ in range(self._settings.default_length))
 
     def __str__(self):
         return self._password
