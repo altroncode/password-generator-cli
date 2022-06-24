@@ -2,33 +2,18 @@ import urllib.request
 import urllib.parse
 import urllib.error
 import contextlib
-import argparse
 import json
+import sys
 
 import password
 import config
 import color
+import cli
 
 
-password_generator_data = config.data.PasswordGeneratorData()
-
-parser = argparse.ArgumentParser(prog='password_generator', description='Generate password')
-parser.add_argument('--length', '-l', type=int, dest='length', default=32, nargs='?')
-parser.add_argument('--platform', '-p', type=str, dest='platform', default='-', nargs='?')
-parser.add_argument('--email', '-e', type=str, dest='email', default=password_generator_data.email)
-parser.add_argument('--username', '-u', type=str, dest='username', default='-', nargs='?')
-parser.add_argument('--send', type=str, dest='send', default='telegram', nargs='?')
-parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
-parser.add_argument('--note', '-n', action='store_true', dest='note')
-
-parser.add_argument('--digits_in_password', '-d', type=bool, dest='digits_in_password')
-parser.add_argument('--capital_letters_in_password', '-cl', type=bool, dest='capital_letters_in_password')
-parser.add_argument('--small_letters_in_password', '-sl', type=bool, dest='small_letters_in_password')
-parser.add_argument('--punctuation_in_password', '-pt', type=bool, dest='punctuation_in_password')
-arguments = parser.parse_args()
+arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv)
 
 password_settings = config.settings.PasswordSettings()
-
 password_settings.digits_in_password = arguments.digits_in_password
 password_settings.capital_letters_in_password = arguments.capital_letters_in_password
 password_settings.small_letters_in_password = arguments.small_letters_in_password
