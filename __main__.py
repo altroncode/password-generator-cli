@@ -6,14 +6,14 @@ import json
 import sys
 
 import password
-import config
+import data
 import color
 import cli
 
 
 arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv)
 
-password_settings = config.settings.PasswordSettings()
+password_settings = data.settings.PasswordSettings()
 password_settings.digits_in_password = arguments.digits_in_password
 password_settings.capital_letters_in_password = arguments.capital_letters_in_password
 password_settings.small_letters_in_password = arguments.small_letters_in_password
@@ -61,7 +61,7 @@ def prepare_data(chat_id: int, text: str = "", **kwargs) -> bytes:
 
 if arguments.send == 'telegram':
 
-    telegram_data = config.data.TelegramData()
+    telegram_data = data.data.TelegramData()
     url = f'https://api.telegram.org/bot{telegram_data.token}'
     send_message_url = f'{url}/sendMessage'
     delete_message_url = f'{url}/deleteMessage'
