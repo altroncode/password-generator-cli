@@ -7,7 +7,7 @@ import os
 
 class PasswordSettings:
     config = configparser.ConfigParser()
-    config_path = pathlib.Path(os.curdir) / 'data.ini'
+    config_path = pathlib.Path(os.curdir) / 'settings.ini'
     config.read(config_path)
 
     @property
