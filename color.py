@@ -1,5 +1,5 @@
 import enum
-import secrets
+import random
 
 
 class Colors(enum.Enum, str):
@@ -9,7 +9,7 @@ class Colors(enum.Enum, str):
     INFO = '\033[34m', '\033[94m'
 
     def __str__(self):
-        return secrets.choice(self.value)
+        return random.choice(self.value)
 
 
 def color_text(color: str, text: str):
