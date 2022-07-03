@@ -1,15 +1,22 @@
-import enum
 import random
 
 
-class Colors(str, enum.Enum):
-    ERROR = '\033[31m', '\033[91m'
-    SUCCESS = '\033[32m', '\033[92m'
-    WARNING = '\033[33m', '\033[93m'
-    INFO = '\033[34m', '\033[94m'
+class Colors:
+    @property
+    def error(self):
+        return random.choice(('\033[31m', '\033[91m'))
 
-    def __str__(self):
-        return random.choice(self.value)
+    @property
+    def success(self):
+        return random.choice(('\033[32m', '\033[92m'))
+
+    @property
+    def warning(self):
+        return random.choice(('\033[33m', '\033[93m'))
+
+    @property
+    def info(self):
+        return random.choice(('\033[34m', '\033[94m'))
 
 
 def color_text(color: str, text: str):
