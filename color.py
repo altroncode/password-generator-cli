@@ -2,7 +2,7 @@ import enum
 import random
 
 
-class Colors(enum.Enum, str):
+class Colors(str, enum.Enum):
     ERROR = '\033[31m', '\033[91m'
     SUCCESS = '\033[32m', '\033[92m'
     WARNING = '\033[33m', '\033[93m'
