@@ -1,69 +1,74 @@
 """Module for managing dynamic app data"""
+import typing
 
-import configparser
-import pathlib
-import os
+from data._field import Field
+from data.data_sources import data_sources
 
 
 class PasswordGeneratorData:
-    """Data for the whole project"""
+    """Data for whole project"""
 
-    config = configparser.ConfigParser()
-    config_path = pathlib.Path(os.curdir) / 'data.ini'
-    config.read(config_path)
+    __section_name: str = 'password_generator'
+    email = Field(value_type=str)
+    username = Field(value_type=str)
 
-    @property
-    def email(self) -> str | None:
-        return self.config.get('password_generator', 'email')
+    def __init__(self, source: data_sources.BaseDataSource) -> None:
+        self.__source = source
+        for field_name, field in self:
+            key = (self.__section_name, field_name)
+            value = self.__source.provide(key, field.value_type)
+            field.set_key(key)
+            field.set_value(value)
 
-    @email.setter
-    def email(self, value: str | None):
-        if value is not None:
-            self.config.set('password_generator', 'email', value)
+    def __getitem__(self, item: str) -> Field | None:
+        field = self.__class__.__dict__[item]
+        return field if isinstance(field, Field) else None
 
-    def save(self):
-        with open(self.config_path, 'w') as file:
-            self.config.write(file)
+    def __setitem__(self, key: str, value: typing.Any) -> None:
+        field = self[key]
+        if field is not None:
+            field.value = value
+
+    def __iter__(self) -> typing.Generator[str, Field]:
+        for field_name, field in self.__class__.__dict__.items():
+            if isinstance(field, Field):
+                yield field_name, field
+
+    def save(self) -> None:
+        for _, field in self:
+            field.save()
 
 
 class TelegramData:
     """Data for work with telegram"""
 
-    config = configparser.ConfigParser()
-    config_path = pathlib.Path(os.curdir) / 'data.ini'
-    config.read(config_path)
+    __section_name: str = 'telegram'
+    user_id = Field(value_type=int)
+    token = Field(value_type=str)
+    last_message_id = Field(value_type=int)
 
-    @property
-    def user_id(self) -> int | None:
-        _user_id = self.config.get('telegram', 'user_id')
-        if _user_id is not None:
-            return int(_user_id)
+    def __init__(self, source: data_sources.BaseDataSource) -> None:
+        self.__source = source
+        for field_name, field in self:
+            key = (self.__section_name, field_name)
+            value = self.__source.provide(key, field.value_type)
+            field.set_key(key)
+            field.set_value(value)
 
-    @user_id.setter
-    def user_id(self, value: str | None):
-        if value is not None:
-            self.config.set('telegram', 'user_id', value)
+    def __getitem__(self, item: str) -> Field | None:
+        field = self.__class__.__dict__[item]
+        return field if isinstance(field, Field) else None
 
-    @property
-    def token(self) -> str | None:
-        return self.config.get('telegram', 'token')
+    def __setitem__(self, key: str, value: typing.Any) -> None:
+        field = self[key]
+        if field is not None:
+            field.value = value
 
-    @token.setter
-    def token(self, value: str | None):
-        if value is not None:
-            self.config.set('telegram', 'token', value)
+    def __iter__(self) -> typing.Generator[str, Field]:
+        for field_name, field in self.__class__.__dict__.items():
+            if isinstance(field, Field):
+                yield field_name, field
 
-    @property
-    def last_message_id(self) -> int | None:
-        _last_message_id = self.config.get('telegram', 'last_message_id')
-        if _last_message_id:
-            return int(_last_message_id)
-
-    @last_message_id.setter
-    def last_message_id(self, value: str | None):
-        if value is not None:
-            self.config.set('telegram', 'last_message_id', value)
-
-    def save(self):
-        with open(self.config_path, 'w') as file:
-            self.config.write(file)
+    def save(self) -> None:
+        for _, field in self:
+            field.save()

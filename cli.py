@@ -15,5 +15,5 @@ parser.add_argument('--small_letters_in_password', '-sl', type=bool, dest='small
 parser.add_argument('--punctuation_in_password', '-pt', type=bool, dest='punctuation_in_password')
 
 
-def get_arguments(argument_parser: argparse.ArgumentParser, args: list[str]):
+def get_arguments(argument_parser: argparse.ArgumentParser, args: list[str]) -> argparse.Namespace:
     return argument_parser.parse_args(args=args)

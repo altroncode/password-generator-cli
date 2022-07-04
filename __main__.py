@@ -5,20 +5,18 @@ import contextlib
 import json
 import sys
 
+from data.data_sources import data_sources
+from data import settings
+from data import data
 import password
-import data
 import color
 import cli
 
 
 arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv)
 
-password_settings = data.settings.PasswordSettings()
-password_settings.digits_in_password = arguments.digits_in_password
-password_settings.capital_letters_in_password = arguments.capital_letters_in_password
-password_settings.small_letters_in_password = arguments.small_letters_in_password
-password_settings.punctuation_in_password = arguments.punctuation_in_password
-
+data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.SETTINGS_PATH)
+password_settings = settings.PasswordSettings(source=data_source)
 password = arguments.password or password.Password(settings=password_settings)
 
 print(password)
@@ -51,17 +49,17 @@ def create_note() -> str:
 
 
 def prepare_data(chat_id: int, text: str = "", **kwargs) -> bytes:
-    data = {
+    _data = {
         "text": text,
         "parse_mode": "MarkdownV2",
         "chat_id": chat_id
     }
-    return urllib.parse.urlencode(data | kwargs).encode("utf-8")
+    return urllib.parse.urlencode(_data | kwargs).encode("utf-8")
 
 
 if arguments.send == 'telegram':
 
-    telegram_data = data.data.TelegramData()
+    telegram_data = data.TelegramData(source=data_sources.IniDataSource(settings.DATA_PATH))
     url = f'https://api.telegram.org/bot{telegram_data.token}'
     send_message_url = f'{url}/sendMessage'
     delete_message_url = f'{url}/deleteMessage'
@@ -78,9 +76,9 @@ if arguments.send == 'telegram':
                                                                          f'`{"*" * 42}`'))
 
         telegram_data.last_message_id = str(json.loads(response.read())['result']['message_id'])
-        telegram_data.save()
+        telegram_data['last_message_id'].save()
 
     except urllib.error.HTTPError:
-        print(color.color_text(color.Colors.ERROR, 'Something went wrong!!!'))
+        print(color.color_text(color.Colors().error, 'Something went wrong!!!'))
     else:
-        print(color.color_text(color.Colors.SUCCESS, 'Success!'))
+        print(color.color_text(color.Colors().success, 'Success!'))

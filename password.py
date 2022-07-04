@@ -1,9 +1,11 @@
 import secrets
 import string
 
+import data
+
 
 class Password:
-    def __init__(self, settings):
+    def __init__(self, settings: data.settings.PasswordSettings):
         self._settings = settings
         self._password = self.create_password()
 
@@ -28,5 +30,3 @@ class Password:
 
     def __len__(self):
         return len(self._password)
-
-
