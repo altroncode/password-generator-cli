@@ -9,7 +9,7 @@ from data.data_sources import data_sources
 from data import settings
 from data import data
 import password
-from color import color
+import color
 import cli
 
 
@@ -79,6 +79,6 @@ if arguments.send == 'telegram':
         telegram_data['last_message_id'].save()
 
     except urllib.error.HTTPError:
-        print(color.color_text(color.Colors().error, 'Something went wrong!!!'))
+        print(color.color_text(color.Colors.ERROR, 'Something went wrong!!!'))
     else:
-        print(color.color_text(color.Colors().success, 'Success!'))
+        print(color.color_text(color.Colors.SUCCESS, 'Success!'))
