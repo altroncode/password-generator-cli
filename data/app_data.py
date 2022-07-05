@@ -18,6 +18,7 @@ class AppData:
             key = (self.__section_name, field_name)
             value = self.__source.provide(key, field.value_type)
             field.set_key(key)
+            field.set_data_source(self.__source)
             field.set_value(value)
 
     def __getitem__(self, item: str) -> Field | None:
@@ -53,6 +54,7 @@ class TelegramData:
             key = (self.__section_name, field_name)
             value = self.__source.provide(key, field.value_type)
             field.set_key(key)
+            field.set_data_source(self.__source)
             field.set_value(value)
 
     def __getitem__(self, item: str) -> Field | None:
