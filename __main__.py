@@ -13,7 +13,7 @@ import color
 import cli
 
 
-arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv)
+arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv[1:])
 
 data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.SETTINGS_PATH)
 password_settings = settings.PasswordSettings(source=data_source)
