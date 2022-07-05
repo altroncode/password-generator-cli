@@ -26,8 +26,9 @@ class WritableDataSource(BaseDataSource, metaclass=abc.ABCMeta):
 class IniDataSource(WritableDataSource):
     __slots__ = ('_parser', '_parser_path', '_parser', '_order')
 
-    def __init__(self, path: str | pathlib.Path) -> None:
+    def __init__(self, path: str | pathlib.Path, separator=', ') -> None:
         self._parser = configparser.ConfigParser()
+        self.separator = separator
         self._parser_path = path
         self._parser.read(self._parser_path)
         self._order: list[BaseDataSource] = [self]
@@ -40,6 +41,8 @@ class IniDataSource(WritableDataSource):
                     return True
                 elif value == 'False':
                     return False
+            if isinstance(value, typing.Iterable):
+                value = value.split(self.separator)
             return value_type(value)
         else:
             return None
