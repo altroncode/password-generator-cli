@@ -7,7 +7,7 @@ import sys
 
 from data.data_sources import data_sources
 from data import settings
-from data import data
+from data import app_data
 import password
 import color
 import cli
@@ -49,17 +49,17 @@ def create_note() -> str:
 
 
 def prepare_data(chat_id: int, text: str = "", **kwargs) -> bytes:
-    _data = {
+    data = {
         "text": text,
         "parse_mode": "MarkdownV2",
         "chat_id": chat_id
     }
-    return urllib.parse.urlencode(_data | kwargs).encode("utf-8")
+    return urllib.parse.urlencode(data | kwargs).encode("utf-8")
 
 
 if arguments.send == 'telegram':
 
-    telegram_data = data.TelegramData(source=data_sources.IniDataSource(settings.DATA_PATH))
+    telegram_data = app_data.TelegramData(source=data_sources.IniDataSource(settings.DATA_PATH))
     url = f'https://api.telegram.org/bot{telegram_data.token}'
     send_message_url = f'{url}/sendMessage'
     delete_message_url = f'{url}/deleteMessage'

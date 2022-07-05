@@ -5,7 +5,7 @@ from data._field import Field
 from data.data_sources import data_sources
 
 SETTINGS_PATH = 'data/settings.ini'
-DATA_PATH = 'data/data.ini'
+DATA_PATH = 'data/app_data.ini'
 
 
 class PasswordSettings:

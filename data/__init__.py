@@ -1,5 +1,5 @@
 """Package for managing app data and settings"""
 
 
-from . import data
+from . import app_data
 from . import settings
