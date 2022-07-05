@@ -9,8 +9,11 @@ class PasswordInfoData:
     """Data for whole project"""
 
     __section_name: str = 'password_info'
-    emails = Field(value_type=list)
+
+    platform = Field(value_type=str)
     username = Field(value_type=str)
+    emails = Field(value_type=list)
+    note = Field(value_type=str)
 
     def __init__(self, source: data_sources.BaseDataSource) -> None:
         self.__source = source
