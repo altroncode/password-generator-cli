@@ -44,8 +44,7 @@ class IniDataSource(WritableDataSource):
             if isinstance(value, typing.Iterable):
                 value = value.split(self.separator)
             return value_type(value)
-        else:
-            return None
+        return None
 
     def set(self, key: tuple[str, ...], value: str) -> None:
         self._parser.set(key[0], key[1], value)
