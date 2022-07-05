@@ -8,6 +8,7 @@ import sys
 from data.data_sources import data_sources
 from data import settings
 from data import app_data
+import password_info
 import password
 import color
 import cli
@@ -24,18 +25,6 @@ print(password)
 
 def escape_message(message: str) -> str:
     return "".join([f'\\{i}' for i in message])
-
-
-def create_message() -> str:
-    message = f'*Platform*: {escape_message(arguments.platform)}\n' \
-              f'*Email*: {escape_message(arguments.email)}\n' \
-              f'*Username*: {escape_message(arguments.username)}\n'
-
-    if arguments.note:
-        note = create_note()
-        return f'{message}*Note*: {note}' if note else message
-
-    return message
 
 
 def create_note() -> str:
@@ -63,13 +52,17 @@ if arguments.send == 'telegram':
     url = f'https://api.telegram.org/bot{telegram_data.token}'
     send_message_url = f'{url}/sendMessage'
     delete_message_url = f'{url}/deleteMessage'
-
+    password_info_data = app_data.PasswordInfoData(source=data_source)
+    telegram_password_director = password_info.PasswordInfoDirector(data=password_info_data)
+    password_info_message = telegram_password_director.create_password_info(
+        builder=password_info.TelegramPasswordInfoBuilder()
+    )
     try:
         with contextlib.suppress(urllib.error.URLError):
             urllib.request.urlopen(delete_message_url, prepare_data(
                 telegram_data.user_id,
                 message_id=telegram_data.last_message_id))
-        urllib.request.urlopen(send_message_url, prepare_data(telegram_data.user_id, create_message()))
+        urllib.request.urlopen(send_message_url, prepare_data(telegram_data.user_id, password_info_message))
         urllib.request.urlopen(send_message_url, prepare_data(telegram_data.user_id,
                                                               f'`{escape_message(password)}`'))
         response = urllib.request.urlopen(send_message_url, prepare_data(telegram_data.user_id,
