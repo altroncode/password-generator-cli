@@ -65,7 +65,9 @@ class CLIArgumentsDataSource(BaseDataSource):
         self.arguments = arguments
 
     def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
-        return getattr(self.arguments, key[-1])
+        if hasattr(self.arguments, key[-1]):
+            return getattr(self.arguments, key[-1])
+        return None
 
     def __add__(self, other: BaseDataSource) -> BaseDataSource:
         self._order.append(other)
