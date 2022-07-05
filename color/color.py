@@ -17,7 +17,3 @@ class Colors:
     @property
     def info(self):
         return random.choice(('\033[34m', '\033[94m'))
-
-
-def color_text(color: str, text: str):
-    return f'{color}{text}\x1b[0m'

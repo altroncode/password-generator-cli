@@ -9,7 +9,7 @@ from data.data_sources import data_sources
 from data import settings
 from data import data
 import password
-import color
+from color import color
 import cli
 
 
