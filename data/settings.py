@@ -35,7 +35,7 @@ class PasswordSettings:
         if field is not None:
             field.value = value
 
-    def __iter__(self) -> typing.Generator[str, Field]:
+    def __iter__(self) -> typing.Generator[tuple[str, Field], None, None]:
         for field_name, field in self.__class__.__dict__.items():
             if isinstance(field, Field):
                 yield field_name, field
