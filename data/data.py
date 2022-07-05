@@ -5,10 +5,10 @@ from data._field import Field
 from data.data_sources import data_sources
 
 
-class PasswordGeneratorData:
+class AppData:
     """Data for whole project"""
 
-    __section_name: str = 'password_generator'
+    __section_name: str = 'app'
     email = Field(value_type=str)
     username = Field(value_type=str)
 
