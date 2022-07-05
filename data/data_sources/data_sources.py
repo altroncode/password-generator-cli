@@ -70,7 +70,7 @@ class CLIArgumentsDataSource(BaseDataSource):
         return OtherDataSource(self._order)
 
 
-class OtherDataSource(BaseDataSource):
+class OtherDataSource(WritableDataSource):
     __slots__ = ('_order',)
 
     def __init__(self, order: list[BaseDataSource]) -> None:
