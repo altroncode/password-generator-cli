@@ -6,7 +6,7 @@ import abc
 
 
 class BaseDataSource(metaclass=abc.ABCMeta):
-    _order: list[lambda: BaseDataSource]
+    _order: list['BaseDataSource']
 
     @abc.abstractmethod
     def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
