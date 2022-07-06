@@ -1,8 +1,8 @@
 import configparser
-import pathlib
-import abc
-import typing
 import argparse
+import pathlib
+import typing
+import abc
 
 
 class BaseDataSource(metaclass=abc.ABCMeta):
