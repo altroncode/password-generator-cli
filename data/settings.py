@@ -10,7 +10,7 @@ DATA_PATH = 'data/app_data.ini'
 
 
 class PasswordSettings:
-    __section_name: str = 'password'
+    _section_name: str = 'password'
     default_length = Field(value_type=int)
     digits_in_password = Field(value_type=bool)
     capital_letters_in_password = Field(value_type=bool)
@@ -20,7 +20,7 @@ class PasswordSettings:
     def __init__(self, source: data_sources.BaseDataSource) -> None:
         self.__source = source
         for field_name, field in self:
-            key = (self.__section_name, field_name)
+            key = (self._section_name, field_name)
             value = self.__source.provide(key, field.value_type)
             field.set_key(key)
             field.set_data_source(self.__source)

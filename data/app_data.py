@@ -8,7 +8,7 @@ from data.data_sources import data_sources
 class PasswordInfoData:
     """Data for whole project"""
 
-    __section_name: str = 'password_info'
+    _section_name: str = 'password_info'
 
     platform = Field(value_type=str)
     username = Field(value_type=str)
@@ -18,7 +18,7 @@ class PasswordInfoData:
     def __init__(self, source: data_sources.BaseDataSource) -> None:
         self.__source = source
         for field_name, field in self:
-            key = (self.__section_name, field_name)
+            key = (self._section_name, field_name)
             value = self.__source.provide(key, field.value_type)
             field.set_key(key)
             field.set_data_source(self.__source)
@@ -46,7 +46,7 @@ class PasswordInfoData:
 class TelegramData:
     """Data for work with telegram"""
 
-    __section_name: str = 'telegram'
+    _section_name: str = 'telegram'
     user_id = Field(value_type=int)
     token = Field(value_type=str)
     last_message_id = Field(value_type=int)
@@ -54,7 +54,7 @@ class TelegramData:
     def __init__(self, source: data_sources.BaseDataSource) -> None:
         self.__source = source
         for field_name, field in self:
-            key = (self.__section_name, field_name)
+            key = (self._section_name, field_name)
             value = self.__source.provide(key, field.value_type)
             field.set_key(key)
             field.set_data_source(self.__source)
