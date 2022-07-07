@@ -22,4 +22,3 @@ class TelegramData(base_data_model.BaseDataModel):
     user_id = Field(value_type=int)
     token = Field(value_type=str)
     last_message_id = Field(value_type=int)
-

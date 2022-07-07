@@ -24,7 +24,7 @@ class WritableDataSource(BaseDataSource, metaclass=abc.ABCMeta):
 
 
 class IniDataSource(WritableDataSource):
-    __slots__ = ('_parser', '_parser_path', '_parser', '_order')
+    __slots__ = ('_parser', 'separator', '_parser_path', '_parser', '_order')
 
     def __init__(self, path: str | pathlib.Path, separator=', ') -> None:
         self._parser = configparser.ConfigParser()
