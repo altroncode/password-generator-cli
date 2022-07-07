@@ -13,7 +13,7 @@ class BaseDataSource(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def __add__(self, other):
+    def __add__(self, other: 'BaseDataSource'):
         pass
 
 
