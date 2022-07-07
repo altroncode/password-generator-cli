@@ -72,6 +72,6 @@ if arguments.send == 'telegram':
         telegram_data['last_message_id'].save()
 
     except urllib.error.HTTPError:
-        print(color.color_text(color.Colors.ERROR, 'Something went wrong!!!'))
+        color.print_colored_text(color.Colors.ERROR, 'Something went wrong!!!')
     else:
-        print(color.color_text(color.Colors.SUCCESS, 'Success!'))
+        color.print_colored_text(color.Colors.SUCCESS, 'Success!')
