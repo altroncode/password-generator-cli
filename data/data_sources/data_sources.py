@@ -36,6 +36,8 @@ class IniDataSource(WritableDataSource):
     def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
         value = self._parser.get(key[0], key[1])
         if value is not None:
+            if value_type == str:
+                return value
             if value_type == bool:
                 if value == 'True':
                     return True
