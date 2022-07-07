@@ -43,7 +43,7 @@ class IniDataSource(WritableDataSource):
                     return True
                 elif value == 'False':
                     return False
-            if isinstance(value, typing.Iterable):
+            if isinstance(value, typing.Collection):
                 value = value.split(self._separator)
             return value_type(value)
         return None
