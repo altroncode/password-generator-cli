@@ -17,7 +17,7 @@ class BaseDataModel:
             field.set_value(value)
 
     def __getitem__(self, item: str) -> Field | None:
-        return self.__class__.__dict__[item]
+        return self.__class__.__dict__.get(item)
 
     def __setitem__(self, key: str, value: typing.Any) -> None:
         self.__dict__[key] = value
