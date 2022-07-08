@@ -17,13 +17,10 @@ class BaseDataModel:
             field.set_value(value)
 
     def __getitem__(self, item: str) -> Field | None:
-        field = self.__class__.__dict__[item]
-        return field if isinstance(field, Field) else None
+        return self.__class__.__dict__[item]
 
     def __setitem__(self, key: str, value: typing.Any) -> None:
-        field = self[key]
-        if field is not None:
-            field.value = value
+        self.__dict__[key] = value
 
     def __iter__(self) -> typing.Generator[tuple[str, Field], None, None]:
         for field_name, field in self.__class__.__dict__.items():
