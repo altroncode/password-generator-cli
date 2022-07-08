@@ -9,6 +9,12 @@ SETTINGS_PATH = 'data/settings.ini'
 DATA_PATH = 'data/app_data.ini'
 
 
+class GeneralSettings(base_data_model.BaseDataModel):
+    _section_name = 'general'
+
+    storage = Field(value_type=list)
+
+
 class PasswordSettings(base_data_model.BaseDataModel):
     _section_name: str = 'password'
 
