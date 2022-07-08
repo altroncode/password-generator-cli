@@ -7,6 +7,7 @@ import http.client
 
 from strorages import base_storage
 from data import app_data
+import exception
 
 
 def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
@@ -33,10 +34,13 @@ class TelegramStorage(base_storage.BaseStorage):
         self.base_url = f'https://api.telegram.org/bot{self.data.token}'
 
     def keep(self, password: str, password_info: str) -> None:
-        self._delete_closing_message()
-        self._send_message(password_info)
-        self._send_message(password)
-        self._send_closing_message()
+        try:
+            self._delete_closing_message()
+            self._send_message(password_info)
+            self._send_message(password)
+            self._send_closing_message()
+        except urllib.error.HTTPError as e:
+            raise exception.KeepPasswordError from e
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = '*' * 42

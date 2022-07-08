@@ -1,4 +1,3 @@
-import urllib.error
 import sys
 
 from data.data_sources import data_sources
@@ -6,6 +5,7 @@ from data import settings
 from data import app_data
 import password_info
 import strorages
+import exception
 import password
 import color
 import cli
@@ -47,7 +47,7 @@ for storage_name in general_settings.storages:
     )
     try:
         storage.keep(password, password_info_message)
-    except urllib.error.HTTPError:
+    except exception.KeepPasswordError:
         color.print_colored_text(color.Colors.ERROR, 'Something went wrong!!!')
     else:
         color.print_colored_text(color.Colors.SUCCESS, 'Success!')
