@@ -7,7 +7,7 @@ class Field:
 
     __slots__ = ('data_source', 'frozen', 'init', 'key', 'value_type', 'value')
 
-    def __init__(self, value_type: type, key: tuple[str] = None, frozen: bool = False, init: bool = False):
+    def __init__(self, value_type: type, key: tuple[str] = None, frozen: bool = False, init: bool = True):
         self.data_source: data_sources.BaseDataSource | None = None
         self.frozen = frozen
         self.init = init
