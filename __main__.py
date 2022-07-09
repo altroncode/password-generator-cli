@@ -41,6 +41,8 @@ for storage_name in general_settings.storages:
     builder = password_info_builders.get(storage_name)
 
     password_info_data = app_data.PasswordInfoData(source=data_source)
+    if password_info_data.is_note:
+        password_info_data.note = create_note()
     telegram_password_director = password_info.PasswordInfoDirector(data=password_info_data)
     password_info_message = telegram_password_director.create_password_info(
         builder=builder()

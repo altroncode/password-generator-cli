@@ -12,6 +12,7 @@ class PasswordInfoData(base_data_model.BaseDataModel):
     username = Field(value_type=str)
     emails = Field(value_type=list)
     is_note = Field(value_type=bool)
+    note = Field(value_type=str, init=False)
 
 
 class TelegramData(base_data_model.BaseDataModel):
