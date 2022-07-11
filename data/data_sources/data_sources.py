@@ -35,7 +35,7 @@ class IniDataSource(WritableDataSource):
         self._order: list[BaseDataSource] = [self]
 
     def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
-        value = self._parser.get(key[0], key[1])
+        value = self._parser.get(key[0], key[1], fallback=None)
         if value is not None:
             if value_type == str:
                 return value
