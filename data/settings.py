@@ -1,6 +1,4 @@
 """Module for setting project"""
-import typing
-
 from data import base_data_model
 from data._field import Field
 
@@ -12,14 +10,14 @@ DATA_PATH = 'password-generator/data/app_data.ini'
 class GeneralSettings(base_data_model.BaseDataModel):
     _section_name = 'general'
 
-    storages = Field(value_type=list)
+    storages: list[str] = Field()
 
 
 class PasswordSettings(base_data_model.BaseDataModel):
     _section_name: str = 'password'
 
-    default_length = Field(value_type=int)
-    digits_in_password = Field(value_type=bool)
-    capital_letters_in_password = Field(value_type=bool)
-    small_letters_in_password = Field(value_type=bool)
-    punctuation_in_password = Field(value_type=bool)
+    default_length: int = Field()
+    digits_in_password: bool = Field()
+    capital_letters_in_password: bool = Field()
+    small_letters_in_password: bool = Field()
+    punctuation_in_password: bool = Field()

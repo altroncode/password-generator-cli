@@ -8,11 +8,11 @@ class PasswordInfoData(base_data_model.BaseDataModel):
 
     _section_name: str = 'password_info'
 
-    platform = Field(value_type=str)
-    username = Field(value_type=str)
-    emails = Field(value_type=list)
-    is_note = Field(value_type=bool)
-    note = Field(value_type=str, init=False)
+    platform: str = Field()
+    username: str = Field()
+    emails: list[str] = Field()
+    is_note: bool = Field()
+    note: str = Field(init=False)
 
 
 class TelegramData(base_data_model.BaseDataModel):
@@ -20,6 +20,6 @@ class TelegramData(base_data_model.BaseDataModel):
 
     _section_name: str = 'telegram'
 
-    user_id = Field(value_type=int)
-    token = Field(value_type=str)
-    last_message_id = Field(value_type=int)
+    user_id: int = Field()
+    token: str = Field()
+    last_message_id: int = Field()

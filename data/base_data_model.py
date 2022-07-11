@@ -12,7 +12,7 @@ class BaseDataModel:
         for field_name, field in self:
             if field.init:
                 key = (self._section_name, field_name)
-                value = self.__source.provide(key, field.value_type)
+                value = self.__source.provide(key, self.__annotations__[field_name])
                 field.set_key(key)
                 field.set_data_source(self.__source)
                 field.set_value(value)
