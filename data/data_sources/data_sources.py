@@ -49,7 +49,7 @@ class IniDataSource(WritableDataSource):
         if isinstance(value_type, types.GenericAlias):
             primary_type, secondary_type = value_type.__origin__, value_type.__args__[0]
             if primary_type in (list, tuple):
-                values = self._parser.get(key[0], key[1], fallback=[]).split(self._separator)
+                values = self._parser.get(key[0], key[1], fallback='').split(self._separator)
                 for index, value in enumerate(values):
                     values[index] = cast_value_to_type(value, secondary_type)
                 return primary_type(values)
