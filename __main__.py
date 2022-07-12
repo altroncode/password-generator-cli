@@ -13,9 +13,9 @@ import cli
 
 arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv[1:])
 
-data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.SETTINGS_PATH)
-password_settings = settings.PasswordSettings(source=data_source)
-general_settings = settings.GeneralSettings(source=data_source)
+settings_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.SETTINGS_PATH)
+password_settings = settings.PasswordSettings(source=settings_source)
+general_settings = settings.GeneralSettings(source=settings_source)
 password = arguments.password or password.Password(settings=password_settings)
 
 print(password)
