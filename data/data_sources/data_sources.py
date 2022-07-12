@@ -2,15 +2,26 @@ from __future__ import annotations
 import configparser
 import argparse
 import pathlib
+import types
 import typing
 import abc
+
+
+def cast_value_to_type(value: str, value_type: type):
+    if value_type == bool:
+        match value:
+            case 'True' | 'true' | 'Yes' | 'yes' | '1':
+                return True
+            case 'False' | 'false' | 'No' | 'no' | '0':
+                return False
+    return value_type(value)
 
 
 class BaseDataSource(metaclass=abc.ABCMeta):
     _order: list[BaseDataSource]
 
     @abc.abstractmethod
-    def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
+    def provide(self, key: tuple[str, ...], value_type: type) -> typing.Any:
         pass
 
     @abc.abstractmethod
@@ -34,20 +45,17 @@ class IniDataSource(WritableDataSource):
         self._parser.read(self._parser_path)
         self._order: list[BaseDataSource] = [self]
 
-    def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
-        value = self._parser.get(key[0], key[1], fallback=None)
-        if value is not None:
-            if value_type == str:
-                return value
-            if value_type == bool:
-                if value == 'True':
-                    return True
-                elif value == 'False':
-                    return False
-            if isinstance(value, typing.Collection):
-                value = value.split(self._separator)
-            return value_type(value)
-        return None
+    def provide(self, key: tuple[str, ...], value_type: type) -> typing.Any:
+        if isinstance(value_type, types.GenericAlias):
+            primary_type, secondary_type = value_type.__origin__, value_type.__args__[0]
+            if primary_type in (list, tuple):
+                values = self._parser.get(key[0], key[1], fallback=[]).split(self._separator)
+                for index, value in enumerate(values):
+                    values[index] = cast_value_to_type(value, secondary_type)
+                return primary_type(values)
+        else:
+            value = self._parser.get(key[0], key[1], fallback=None)
+            return cast_value_to_type(value, value_type) if value is not None else None
 
     def set(self, key: tuple[str, ...], value: str) -> None:
         self._parser.set(key[0], key[1], value)
