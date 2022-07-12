@@ -61,7 +61,7 @@ class IniDataSource(WritableDataSource):
             self._parser.write(file)
 
     def __add__(self, other: BaseDataSource) -> BaseDataSource:
-        return OtherDataSource([self])
+        return OtherDataSource([self, other])
 
 
 class CLIArgumentsDataSource(BaseDataSource):
@@ -76,7 +76,7 @@ class CLIArgumentsDataSource(BaseDataSource):
         return None
 
     def __add__(self, other: BaseDataSource) -> BaseDataSource:
-        return OtherDataSource([self])
+        return OtherDataSource([self, other])
 
 
 class OtherDataSource(WritableDataSource):
