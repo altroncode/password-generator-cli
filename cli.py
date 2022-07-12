@@ -1,7 +1,7 @@
 import argparse
 
 
-parser = argparse.ArgumentParser(prog='password_generator', description='Generate password')
+parser = argparse.ArgumentParser(prog='password_generator', description='Generate password and save it to storages')
 parser.add_argument('--length', '-l', type=int, dest='length', nargs='?')
 parser.add_argument('--platform', '-p', type=str, dest='platform', nargs='?')
 parser.add_argument('--email', '-e', type=str, dest='email')
