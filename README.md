@@ -8,7 +8,7 @@ you can create passwords and keep them in storages.
 This version does not require any dependency.
 
 ## Usage
-in the directory where the password-generator is located:
+In the same directory as the password-generator:
 ```commandline
 python password_generator --length 20 --username username
 --platform platform --send telegram --note
