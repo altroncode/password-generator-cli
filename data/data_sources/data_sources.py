@@ -16,7 +16,7 @@ def cast_value_to_type(value: str, value_type: type):
     return value_type(value)
 
 
-class BaseDataSource(metaclass=abc.ABCMeta):
+class BaseDataSource(abc.ABC):
 
     @abc.abstractmethod
     def provide(self, key: tuple[str, ...], value_type: type) -> typing.Any:
@@ -27,7 +27,7 @@ class BaseDataSource(metaclass=abc.ABCMeta):
         pass
 
 
-class WritableDataSource(BaseDataSource, metaclass=abc.ABCMeta):
+class WritableDataSource(abc.ABC, BaseDataSource):
 
     def set(self, *args, **kwargs) -> None:
         pass
