@@ -15,4 +15,4 @@ python password_generator --length 20 --username username
 ```
 
 ## Configuration
-Config files is located in `data` directory.
+Config files are located in `data` directory.
