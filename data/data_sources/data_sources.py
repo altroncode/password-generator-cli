@@ -29,6 +29,7 @@ class BaseDataSource(abc.ABC):
 
 class WritableDataSource(abc.ABC, BaseDataSource):
 
+    @abc.abstractmethod
     def set(self, *args, **kwargs) -> None:
         pass
 
