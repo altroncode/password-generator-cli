@@ -1,8 +1,8 @@
 import configparser
 import argparse
 import pathlib
-import types
 import typing
+import types
 import abc
 
 
@@ -27,7 +27,7 @@ class BaseDataSource(abc.ABC):
         pass
 
 
-class WritableDataSource(abc.ABC, BaseDataSource):
+class WritableDataSource(BaseDataSource, abc.ABC):
 
     @abc.abstractmethod
     def set(self, *args, **kwargs) -> None:
