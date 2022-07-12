@@ -4,15 +4,16 @@ from data.data_sources import data_sources
 
 
 class Field:
+    __slots__ = ('data_source', 'frozen', 'init', 'key', 'value', 'alias')
 
-    __slots__ = ('data_source', 'frozen', 'init', 'key', 'value')
-
-    def __init__(self, key: tuple[str] = None, frozen: bool = False, init: bool = True):
+    def __init__(self, key: tuple[str] = None, *, frozen: bool = False, init: bool = True,
+                 default=None, alias: str | None = None):
         self.data_source: data_sources.BaseDataSource | None = None
+        self.key = key
         self.frozen = frozen
         self.init = init
-        self.key = key
-        self.value: typing.Any = None
+        self.alias = alias
+        self.value = default
 
     def set_key(self, key: tuple[str, ...]) -> None:
         self.key = key
