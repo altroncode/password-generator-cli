@@ -16,8 +16,8 @@ class GeneralSettings(base_data_model.BaseDataModel):
 class PasswordSettings(base_data_model.BaseDataModel):
     _section_name: str = 'password'
 
-    default_length: int = Field()
-    digits_in_password: bool = Field()
-    capital_letters_in_password: bool = Field()
-    small_letters_in_password: bool = Field()
-    punctuation_in_password: bool = Field()
+    length: int = Field()
+    is_digits: bool = Field()
+    is_capital_letters: bool = Field()
+    is_small_letters: bool = Field()
+    is_punctuation: bool = Field()
