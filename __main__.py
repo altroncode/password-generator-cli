@@ -36,6 +36,7 @@ password_info_builders = {'telegram': password_info.TelegramPasswordInfoBuilder}
 storage_datas = {'telegram': app_data.TelegramData}
 
 for storage_name in general_settings.storages:
+    data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.DATA_PATH)
     storage_data = storage_datas.get(storage_name)
     storage = storages_dict.get(storage_name)(storage_data(source=data_source))
     builder = password_info_builders.get(storage_name)
