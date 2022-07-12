@@ -18,7 +18,6 @@ def cast_value_to_type(value: str, value_type: type):
 
 
 class BaseDataSource(metaclass=abc.ABCMeta):
-    _order: list[BaseDataSource]
 
     @abc.abstractmethod
     def provide(self, key: tuple[str, ...], value_type: type) -> typing.Any:
@@ -43,7 +42,6 @@ class IniDataSource(WritableDataSource):
         self._separator = separator
         self._parser_path = path
         self._parser.read(self._parser_path)
-        self._order: list[BaseDataSource] = [self]
 
     def provide(self, key: tuple[str, ...], value_type: type) -> typing.Any:
         if isinstance(value_type, types.GenericAlias):
@@ -63,15 +61,13 @@ class IniDataSource(WritableDataSource):
             self._parser.write(file)
 
     def __add__(self, other: BaseDataSource) -> BaseDataSource:
-        self._order.append(other)
-        return OtherDataSource(self._order)
+        return OtherDataSource([self])
 
 
 class CLIArgumentsDataSource(BaseDataSource):
     __slots__ = ('_order', 'arguments')
 
     def __init__(self, arguments: argparse.Namespace):
-        self._order: list[BaseDataSource] = [self]
         self.arguments = arguments
 
     def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
@@ -80,8 +76,7 @@ class CLIArgumentsDataSource(BaseDataSource):
         return None
 
     def __add__(self, other: BaseDataSource) -> BaseDataSource:
-        self._order.append(other)
-        return OtherDataSource(self._order)
+        return OtherDataSource([self])
 
 
 class OtherDataSource(WritableDataSource):
@@ -102,6 +97,5 @@ class OtherDataSource(WritableDataSource):
                 data_source.set(key, value)
                 break
 
-    def __add__(self, other: BaseDataSource) -> BaseDataSource:
+    def __add__(self, other: BaseDataSource) -> None:
         self._order.append(other)
-        return OtherDataSource(self._order)
