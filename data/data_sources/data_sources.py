@@ -35,7 +35,7 @@ class WritableDataSource(abc.ABC, BaseDataSource):
 
 
 class IniDataSource(WritableDataSource):
-    __slots__ = ('_parser', '_separator', '_parser_path', '_parser', '_order')
+    __slots__ = ('_parser', '_separator', '_parser_path', '_parser')
 
     def __init__(self, path: str | pathlib.Path, separator=', ') -> None:
         self._parser = configparser.ConfigParser()
@@ -65,7 +65,7 @@ class IniDataSource(WritableDataSource):
 
 
 class CLIArgumentsDataSource(BaseDataSource):
-    __slots__ = ('_order', 'arguments')
+    __slots__ = ('arguments',)
 
     def __init__(self, arguments: argparse.Namespace):
         self.arguments = arguments
