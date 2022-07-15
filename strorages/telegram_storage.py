@@ -1,3 +1,4 @@
+import contextlib
 import json
 import typing
 import urllib.request
@@ -41,7 +42,7 @@ class TelegramStorage(base_storage.BaseStorage):
             self._send_message(password_info)
             self._send_message(escape_message(password), style='code')
             self._send_closing_message()
-        except (urllib.error.HTTPError, urllib.error.URLError) as e:
+        except urllib.error.HTTPError as e:
             raise exception.KeepPasswordError from e
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
@@ -54,11 +55,13 @@ class TelegramStorage(base_storage.BaseStorage):
     def _delete_closing_message(self) -> http.client.HTTPResponse | None:
         closing_message_id = self.data.last_message_id
         if closing_message_id is not None:
-            url = f'{self.base_url}/deleteMessage'
-            request_data = prepare_request_data(
-                self.data.user_id, message_id=self.data.last_message_id
-            )
-            return send_request(url, request_data)
+            with contextlib.suppress(urllib.error.URLError):
+                url = f'{self.base_url}/deleteMessage'
+                request_data = prepare_request_data(
+                    self.data.user_id, message_id=self.data.last_message_id
+                )
+                return send_request(url, request_data)
+        return None
 
     def _send_message(self, message: str, style: MessageStyles = None) -> http.client.HTTPResponse:
         url = f'{self.base_url}/sendMessage'
