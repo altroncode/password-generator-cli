@@ -1,4 +1,5 @@
 import json
+import typing
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -7,6 +8,8 @@ import http.client
 from strorages import base_storage
 from data import app_data
 import exception
+
+MessageStyles = typing.Literal['bold', 'italic', 'code', 'strike', 'underline']
 
 
 def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
@@ -43,7 +46,7 @@ class TelegramStorage(base_storage.BaseStorage):
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = '*' * 42
-        response = self._send_message(message)
+        response = self._send_message(message, style='code')
         self.data.last_message_id = str(json.loads(response.read())['result']['message_id'])
         self.data['last_message_id'].save()
         return response
@@ -57,7 +60,17 @@ class TelegramStorage(base_storage.BaseStorage):
             )
             return send_request(url, request_data)
 
-    def _send_message(self, message: str) -> http.client.HTTPResponse:
+    def _send_message(self, raw_message: str, style: MessageStyles = None) -> http.client.HTTPResponse:
         url = f'{self.base_url}/sendMessage'
-        data = prepare_request_data(self.data.user_id, escape_message(message))
+        message = escape_message(raw_message)
+        style_templates = {
+            'bold': '**{}**',
+            'italic': '*{}*',
+            'code': '`{}`',
+            'strike': '~~{}~~',
+        }
+        style_template = style_templates.get(style)
+        if style_template:
+            message = style_template.format(message)
+        data = prepare_request_data(self.data.user_id, message)
         return send_request(url, data)
