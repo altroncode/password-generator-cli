@@ -63,10 +63,10 @@ class TelegramStorage(base_storage.BaseStorage):
     def _send_message(self, message: str, style: MessageStyles = None) -> http.client.HTTPResponse:
         url = f'{self.base_url}/sendMessage'
         style_templates = {
-            'bold': '**{}**',
-            'italic': '*{}*',
+            'bold': '*{}*',
+            'italic': '__{}__',
             'code': '`{}`',
-            'strike': '~~{}~~',
+            'strike': '~{}~',
         }
         style_template = style_templates.get(style)
         if style_template:
