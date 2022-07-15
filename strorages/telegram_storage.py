@@ -1,4 +1,3 @@
-import contextlib
 import json
 import urllib.request
 import urllib.parse
@@ -16,7 +15,7 @@ def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
 
 def prepare_request_data(chat_id: int, text: str = "", **kwargs) -> bytes:
     data = {
-        "text": escape_message(text),
+        "text": text,
         "parse_mode": "MarkdownV2",
         "chat_id": chat_id
     }
@@ -60,5 +59,5 @@ class TelegramStorage(base_storage.BaseStorage):
 
     def _send_message(self, message: str) -> http.client.HTTPResponse:
         url = f'{self.base_url}/sendMessage'
-        data = prepare_request_data(self.data.user_id, message)
+        data = prepare_request_data(self.data.user_id, escape_message(message))
         return send_request(url, data)
