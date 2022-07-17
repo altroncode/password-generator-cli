@@ -1,6 +1,7 @@
 import typing
 
 from data import app_data
+import utils
 
 
 class BasePasswordInfoBuilder(typing.Protocol):
@@ -11,7 +12,7 @@ class BasePasswordInfoBuilder(typing.Protocol):
     def set_platform(self, platform: str) -> str:
         pass
 
-    def set_username(self, username: str) -> str:
+    def set_login(self, login: str) -> str:
         pass
 
     def set_email(self, email: str) -> str:
@@ -30,38 +31,38 @@ class TelegramPasswordInfoBuilder:
         return self._password_info
 
     def set_platform(self, platform: str) -> str:
-        self._password_info += f'\n*Platform*: {platform}'
+        self._password_info += f'\n*Platform*: {utils.escape_message(platform)}'
         self._password_info.lstrip('\n')
         return self._password_info
 
-    def set_username(self, username: str) -> str:
-        self._password_info += f'\n*Username*: {username}'
+    def set_login(self, login: str) -> str:
+        self._password_info += f'\n*Username*: {utils.escape_message(login)}'
         self._password_info.lstrip('\n')
         return self._password_info
 
     def set_email(self, email: str) -> str:
-        self._password_info += f'\n*Emails*: {email}'
+        self._password_info += f'\n*Emails*: {utils.escape_message(email)}'
         self._password_info.lstrip('\n')
         return self._password_info
 
     def set_note(self, note: str) -> str:
-        self._password_info += f'\n*Note*: {note}'
+        self._password_info += f'\n*Note*: {utils.escape_message(note)}'
         self._password_info.lstrip('\n')
         return self._password_info
 
 
 class PasswordInfoDirector:
-    def __init__(self, data: app_data.PasswordInfoData):
+    def __init__(self, data: app_data.PasswordInfo):
         self._data = data
 
     def create_password_info(self, builder: BasePasswordInfoBuilder):
         platform = self._data.platform
-        username = self._data.login
+        login = self._data.login
         note = self._data.note
         if platform is not None:
             builder.set_platform(platform)
-        if username is not None:
-            builder.set_username(username)
+        if login is not None:
+            builder.set_login(login)
         for email in self._data.emails:
             builder.set_email(email)
         if note is not None:
