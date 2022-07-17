@@ -56,7 +56,7 @@ class PasswordInfoDirector:
 
     def create_password_info(self, builder: BasePasswordInfoBuilder):
         platform = self._data.platform
-        username = self._data.username
+        username = self._data.login
         note = self._data.note
         if platform is not None:
             builder.set_platform(platform)

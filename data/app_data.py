@@ -9,7 +9,7 @@ class PasswordInfoData(base_data_model.BaseDataModel):
     _section_name: str = 'password_info'
 
     platform: str = Field()
-    username: str = Field()
+    login: str = Field()
     emails: list[str] = Field()
     is_note: bool = Field()
     note: str = Field(init=False)
