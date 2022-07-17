@@ -9,16 +9,14 @@ import http.client
 from strorages import base_storage
 from data import app_data
 import exception
+import utils
+
 
 MessageStyles = typing.Literal['bold', 'italic', 'code', 'strike', 'underline']
 
 
 def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
     return urllib.request.urlopen(url, data)
-
-
-def escape_message(message: str) -> str:
-    return "".join([f'\\{i}' for i in message])
 
 
 class TelegramStorage(base_storage.BaseStorage):
@@ -31,7 +29,7 @@ class TelegramStorage(base_storage.BaseStorage):
         try:
             self._delete_closing_message()
             self._send_message(password_info)
-            self._send_message(escape_message(password), style='code')
+            self._send_message(utils.escape_message(password), style='code')
         except urllib.error.HTTPError as e:
             raise exception.KeepPasswordError from e
         finally:
