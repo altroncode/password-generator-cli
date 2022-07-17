@@ -36,7 +36,7 @@ class TelegramPasswordInfoBuilder:
         return self._password_info
 
     def set_login(self, login: str) -> str:
-        self._password_info += f'\n*Username*: {utils.escape_message(login)}'
+        self._password_info += f'\n*Login*: {utils.escape_message(login)}'
         self._password_info.lstrip('\n')
         return self._password_info
 
