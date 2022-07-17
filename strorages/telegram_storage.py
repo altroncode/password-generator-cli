@@ -17,15 +17,6 @@ def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
     return urllib.request.urlopen(url, data)
 
 
-def prepare_request_data(chat_id: int, text: str = "", **kwargs) -> bytes:
-    data = {
-        "text": text,
-        "parse_mode": "MarkdownV2",
-        "chat_id": chat_id
-    }
-    return urllib.parse.urlencode(data | kwargs).encode("utf-8")
-
-
 def escape_message(message: str) -> str:
     return "".join([f'\\{i}' for i in message])
 
@@ -57,7 +48,7 @@ class TelegramStorage(base_storage.BaseStorage):
         if closing_message_id is not None:
             with contextlib.suppress(urllib.error.URLError):
                 url = f'{self.base_url}/deleteMessage'
-                request_data = prepare_request_data(
+                request_data = self._prepare_request_data(
                     self.data.user_id, message_id=self.data.last_message_id
                 )
                 return send_request(url, request_data)
@@ -74,5 +65,14 @@ class TelegramStorage(base_storage.BaseStorage):
         style_template = style_templates.get(style)
         if style_template:
             message = style_template.format(message)
-        data = prepare_request_data(self.data.user_id, message)
+        data = self._prepare_request_data(self.data.user_id, message)
         return send_request(url, data)
+
+    @staticmethod
+    def _prepare_request_data(chat_id: int, text: str = "", **kwargs) -> bytes:
+        data = {
+            "text": text,
+            "parse_mode": "MarkdownV2",
+            "chat_id": chat_id
+        }
+        return urllib.parse.urlencode(data | kwargs).encode("utf-8")
