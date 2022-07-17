@@ -32,9 +32,10 @@ class TelegramStorage(base_storage.BaseStorage):
             self._delete_closing_message()
             self._send_message(password_info)
             self._send_message(escape_message(password), style='code')
-            self._send_closing_message()
         except urllib.error.HTTPError as e:
             raise exception.KeepPasswordError from e
+        finally:
+            self._send_closing_message()
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = '*' * 42
