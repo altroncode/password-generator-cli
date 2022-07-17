@@ -4,7 +4,7 @@ from data.data_sources import data_sources
 from data._field import Field
 
 
-class BaseDataModel:
+class BaseModel:
     _section_name: str
 
     def __init__(self, source: data_sources.BaseDataSource) -> None:

@@ -7,13 +7,13 @@ SETTINGS_PATH = 'password-generator/data/settings.ini'
 DATA_PATH = 'password-generator/data/app_data.ini'
 
 
-class GeneralSettings(base_data_model.BaseDataModel):
+class GeneralSettings(base_data_model.BaseModel):
     _section_name = 'general'
 
     storages: list[str] = Field()
 
 
-class PasswordSettings(base_data_model.BaseDataModel):
+class PasswordSettings(base_data_model.BaseModel):
     _section_name: str = 'password'
 
     length: int = Field()

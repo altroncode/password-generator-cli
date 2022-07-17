@@ -3,7 +3,7 @@ from data import base_data_model
 from data._field import Field
 
 
-class PasswordInfoData(base_data_model.BaseDataModel):
+class PasswordInfo(base_data_model.BaseModel):
     """Data for whole project"""
 
     _section_name: str = 'password_info'
@@ -15,7 +15,7 @@ class PasswordInfoData(base_data_model.BaseDataModel):
     note: str = Field(init=False)
 
 
-class TelegramData(base_data_model.BaseDataModel):
+class Telegram(base_data_model.BaseModel):
     """Data for work with telegram"""
 
     _section_name: str = 'telegram'
