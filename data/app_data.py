@@ -15,7 +15,7 @@ class PasswordInfo(base_data_model.BaseModel):
     note: str = Field(init=False)
 
 
-class Telegram(base_data_model.BaseModel):
+class TelegramData(base_data_model.BaseModel):
     """Data for work with telegram"""
 
     _section_name: str = 'telegram'
