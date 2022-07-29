@@ -15,7 +15,7 @@ class Password:
     def create_password(self) -> str:
         length: int = self._settings.length
         next_symbol: int = 0
-        password_symbols: list[str] = [''] * 30
+        password_symbols: list[str] = [''] * length
 
         for i, symbols in enumerate(self._get_symbols()):
             password_symbols[next_symbol:] = [
