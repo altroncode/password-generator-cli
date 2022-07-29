@@ -3,7 +3,7 @@ from data import base_data_model
 from data._field import Field
 
 
-class PasswordInfo(base_data_model.BaseModel):
+class PasswordInfoData(base_data_model.BaseModel):
     """Data for whole project"""
 
     _section_name: str = 'password_info'
