@@ -1,10 +1,10 @@
-import contextlib
-import json
-import typing
 import urllib.request
-import urllib.parse
 import urllib.error
+import urllib.parse
 import http.client
+import contextlib
+import typing
+import json
 
 from strorages import base_storage
 from data import app_data
@@ -21,7 +21,7 @@ def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
 
 class TelegramStorage(base_storage.BaseStorage):
 
-    def __init__(self, data: app_data.TelegramData) -> None:
+    def __init__(self, data: app_data.Telegram) -> None:
         self.data = data
         self.base_url = f'https://api.telegram.org/bot{self.data.token}'
 
