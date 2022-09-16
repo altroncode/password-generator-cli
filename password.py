@@ -17,7 +17,7 @@ class Password:
         next_symbol: int = 0
         password_symbols: list[str] = [''] * length
 
-        for i, symbols in enumerate(self._get_symbols()):
+        for i, symbols in enumerate(self._get_symbol_groups()):
             password_symbols[next_symbol:] = [
                 secrets.choice(symbols) for _ in range(length - next_symbol)
             ]
@@ -25,7 +25,7 @@ class Password:
         random.shuffle(password_symbols)
         return ''.join(password_symbols)
 
-    def _get_symbols(self):
+    def _get_symbol_groups(self):
         symbols: dict = {
             string.digits: self._settings.is_digits,
             string.ascii_uppercase: self._settings.is_capital_letters,
