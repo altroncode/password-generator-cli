@@ -26,13 +26,13 @@ class Password:
         return ''.join(password_symbols)
 
     def _get_symbol_groups(self):
-        symbols: dict = {
+        symbol_groups: dict = {
             string.digits: self._settings.is_digits,
             string.ascii_uppercase: self._settings.is_capital_letters,
             string.ascii_lowercase: self._settings.is_small_letters,
             string.punctuation: self._settings.is_punctuation
         }
-        return {key: value for key, value in symbols.items() if value}
+        return [value for key, value in symbol_groups.items() if value]
 
     def __str__(self):
         return self._password
