@@ -16,12 +16,12 @@ class Password:
         length: int = self._settings.length
         next_symbol: int = 0
         password_symbols: list[str] = [''] * length
-
-        for i, symbols in enumerate(self._get_symbol_groups()):
+        symbol_groups = self._get_symbol_groups()
+        for i, symbols in enumerate(symbol_groups):
             password_symbols[next_symbol:] = [
                 secrets.choice(symbols) for _ in range(length - next_symbol)
             ]
-            next_symbol = random.randint(i+1, length-1)
+            next_symbol = random.randint(i+1, length-(len(symbol_groups) - i))
         random.shuffle(password_symbols)
         return ''.join(password_symbols)
 
