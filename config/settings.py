@@ -1,5 +1,5 @@
 from config.data_models import base_data_model
-from config._field import Field
+from config.data_models.field import Field
 
 
 SETTINGS_PATH = 'password-generator/config/settings.ini'
