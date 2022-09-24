@@ -1,7 +1,7 @@
 import typing
 
-from config import settings
 import utils
+from config import settings
 
 
 class BasePasswordInfoBuilder(typing.Protocol):

@@ -1,13 +1,13 @@
 import sys
 
-from config.data_sources import data_sources
-from config import settings
-import password_info
-import strorages
+import cli
+import color
 import exception
 import password
-import color
-import cli
+import password_info
+import strorages
+from config import settings
+from config.data_sources import data_sources
 
 
 arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv[1:])

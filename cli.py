@@ -1,5 +1,6 @@
 import argparse
 
+
 parser = argparse.ArgumentParser(
     prog='password-generator',
     description='Generate passwords and save them to storages'
