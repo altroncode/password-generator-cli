@@ -1,10 +1,10 @@
 """Module for setting project"""
-from data import base_data_model
-from data._field import Field
+from config import base_data_model
+from config._field import Field
 
 
-SETTINGS_PATH = 'password-generator/data/settings.ini'
-DATA_PATH = 'password-generator/data/app_data.ini'
+SETTINGS_PATH = 'password-generator/config/settings.ini'
+DATA_PATH = 'password-generator/config/app_data.ini'
 
 
 class GeneralSettings(base_data_model.BaseModel):

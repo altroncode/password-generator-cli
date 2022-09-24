@@ -1,8 +1,8 @@
 import sys
 
-from data.data_sources import data_sources
-from data import settings
-from data import app_data
+from config.data_sources import data_sources
+from config import settings
+from config import app_data
 import password_info
 import strorages
 import exception

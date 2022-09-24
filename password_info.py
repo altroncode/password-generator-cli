@@ -1,6 +1,6 @@
 import typing
 
-from data import app_data
+from config import app_data
 import utils
 
 

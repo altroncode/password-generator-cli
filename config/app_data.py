@@ -1,6 +1,6 @@
-"""Module for managing dynamic app data"""
-from data import base_data_model
-from data._field import Field
+"""Module for managing dynamic app config"""
+from config import base_data_model
+from config._field import Field
 
 
 class PasswordInfoData(base_data_model.BaseModel):

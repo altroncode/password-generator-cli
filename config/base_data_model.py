@@ -1,7 +1,7 @@
 import typing
 
-from data.data_sources import data_sources
-from data._field import Field
+from config.data_sources import data_sources
+from config._field import Field
 
 
 class BaseModel:

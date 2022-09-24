@@ -1,6 +1,6 @@
 import typing
 
-from data.data_sources import data_sources
+from config.data_sources import data_sources
 
 
 class Field:

@@ -7,7 +7,7 @@ import typing
 import json
 
 from strorages import base_storage
-from data import app_data
+from config import app_data
 import exception
 import utils
 

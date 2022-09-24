@@ -2,13 +2,13 @@ import random
 import secrets
 import string
 
-import data
+import config
 
 
 class Password:
     __slots__ = ('_settings', '_password')
 
-    def __init__(self, settings: data.settings.PasswordSettings):
+    def __init__(self, settings: config.settings.PasswordSettings):
         self._settings = settings
         self._password = self.create_password()
 
