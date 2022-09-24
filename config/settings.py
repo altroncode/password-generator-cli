@@ -1,4 +1,4 @@
-from config import base_data_model
+from config.data_models import base_data_model
 from config._field import Field
 
 
