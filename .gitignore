@@ -7,10 +7,10 @@ __pycache__/
 # C extensions
 *.so
 
-#IDE
+# IDE
 .idea/
 
-#Configuration
+# dConfiguration
 .env
 
 # Developing

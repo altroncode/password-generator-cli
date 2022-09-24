@@ -1,10 +1,26 @@
-"""Module for setting project"""
 from config import base_data_model
 from config._field import Field
 
 
 SETTINGS_PATH = 'password-generator/config/settings.ini'
-DATA_PATH = 'password-generator/config/app_data.ini'
+
+
+class PasswordInfoSettings(base_data_model.BaseModel):
+    _section_name: str = 'password_info'
+
+    platform: str = Field()
+    login: str = Field()
+    emails: list[str] = Field()
+    is_note: bool = Field()
+    note: str = Field(init=False)
+
+
+class TelegramSettings(base_data_model.BaseModel):
+    _section_name: str = 'telegram'
+
+    user_id: int = Field()
+    token: str = Field()
+    last_message_id: int = Field()
 
 
 class GeneralSettings(base_data_model.BaseModel):
