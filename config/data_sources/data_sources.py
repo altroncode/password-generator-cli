@@ -1,9 +1,9 @@
-import configparser
-import argparse
-import pathlib
-import typing
-import types
 import abc
+import argparse
+import configparser
+import pathlib
+import types
+import typing
 
 
 def cast_value_to_type(value: str, value_type: type):
@@ -34,6 +34,62 @@ class WritableDataSource(BaseDataSource, abc.ABC):
     @abc.abstractmethod
     def set(self, *args, **kwargs) -> None:
         pass
+
+
+class OtherDataSource(WritableDataSource):
+    __slots__ = ('_order',)
+
+    def __init__(self, order: list[BaseDataSource]) -> None:
+        self._order = order
+
+    def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
+        for data_source in self._order:
+            value = data_source.provide(key, value_type)
+            if value is not None:
+                return value
+
+    def set(self, key: tuple[str, ...], value: typing.Any) -> None:
+        for data_source in self._order:
+            if isinstance(data_source, WritableDataSource):
+                data_source.set(key, value)
+                break
+
+    def __add__(self, other: BaseDataSource) -> None:
+        self._order.append(other)
+
+
+class EnvDataSource(WritableDataSource):
+    def __init__(self):
+        self.__path = '.env'
+
+    def provide(self, key: str, value_type: type = str) -> typing.Any:
+        lines = open(self.__path, 'r').readlines()
+        for i, line in enumerate(lines):
+            if line.split('=')[0] == key:
+                value = line.split('=')[1]
+                if isinstance(value_type, types.GenericAlias):
+                    secondary_type = value_type.__args__[0]
+                    value = value.replace('[', '').replace(']', '')
+                    value = value.replace("'", '').replace('"', '')
+                    return [secondary_type(j) for j in value.split(', ')]
+                return value_type(value)
+
+    def set(self, key: str, value: typing.Any) -> None:
+        lines = open(self.__path, 'r').readlines()
+        for i, line in enumerate(lines):
+            if not line.endswith('\n'):
+                lines[i] = f'{line}\n'
+
+            if line.split('=')[0] == key:
+                lines[i] = f'{key}={value}\n'
+                break
+        else:
+            lines.append(f'{key}={value}\n')
+        file = open(self.__path, 'w')
+        file.writelines(lines)
+
+    def __add__(self, other: 'BaseDataSource') -> OtherDataSource:
+        return OtherDataSource([self, other])
 
 
 class IniDataSource(WritableDataSource):
@@ -79,25 +135,3 @@ class CLIArgumentsDataSource(BaseDataSource):
 
     def __add__(self, other: BaseDataSource) -> BaseDataSource:
         return OtherDataSource([self, other])
-
-
-class OtherDataSource(WritableDataSource):
-    __slots__ = ('_order',)
-
-    def __init__(self, order: list[BaseDataSource]) -> None:
-        self._order = order
-
-    def provide(self, key: tuple[str, ...], value_type: type = str) -> typing.Any:
-        for data_source in self._order:
-            value = data_source.provide(key, value_type)
-            if value is not None:
-                return value
-
-    def set(self, key: tuple[str, ...], value: typing.Any) -> None:
-        for data_source in self._order:
-            if isinstance(data_source, WritableDataSource):
-                data_source.set(key, value)
-                break
-
-    def __add__(self, other: BaseDataSource) -> None:
-        self._order.append(other)
