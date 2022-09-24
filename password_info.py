@@ -1,6 +1,6 @@
 import typing
 
-from config import app_data
+from config import settings
 import utils
 
 
@@ -52,18 +52,18 @@ class TelegramPasswordInfoBuilder:
 
 
 class PasswordInfoDirector:
-    def __init__(self, data: app_data.PasswordInfo):
-        self._data = data
+    def __init__(self, password_info_settings: settings.PasswordInfoSettings):
+        self._settings = password_info_settings
 
     def create_password_info(self, builder: BasePasswordInfoBuilder):
-        platform = self._data.platform
-        login = self._data.login
-        note = self._data.note
+        platform = self._settings.platform
+        login = self._settings.login
+        note = self._settings.note
         if platform is not None:
             builder.set_platform(platform)
         if login is not None:
             builder.set_login(login)
-        for email in self._data.emails:
+        for email in self._settings.emails:
             builder.set_email(email)
         if note is not None:
             builder.set_note(note)

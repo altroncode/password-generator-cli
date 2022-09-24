@@ -7,7 +7,7 @@ import typing
 import json
 
 from strorages import base_storage
-from config import app_data
+from config import settings
 import exception
 import utils
 
@@ -21,9 +21,9 @@ def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
 
 class TelegramStorage(base_storage.BaseStorage):
 
-    def __init__(self, data: app_data.Telegram) -> None:
-        self.data = data
-        self.base_url = f'https://api.telegram.org/bot{self.data.token}'
+    def __init__(self, telegram_settings: settings.TelegramSettings) -> None:
+        self.__settings = telegram_settings
+        self.__base_url = f'https://api.telegram.org/bot{self.__settings.token}'
 
     def keep(self, password: str, password_info: str) -> None:
         try:
@@ -38,23 +38,23 @@ class TelegramStorage(base_storage.BaseStorage):
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = '*' * 42
         response = self._send_message(message, style='code')
-        self.data.last_message_id = str(json.loads(response.read())['result']['message_id'])
-        self.data['last_message_id'].save()
+        self.__settings.last_message_id = str(json.loads(response.read())['result']['message_id'])
+        self.__settings['last_message_id'].save()
         return response
 
     def _delete_closing_message(self) -> http.client.HTTPResponse | None:
-        closing_message_id = self.data.last_message_id
+        closing_message_id = self.__settings.last_message_id
         if closing_message_id is not None:
             with contextlib.suppress(urllib.error.URLError):
-                url = f'{self.base_url}/deleteMessage'
+                url = f'{self.__base_url}/deleteMessage'
                 request_data = self._prepare_request_data(
-                    self.data.user_id, message_id=self.data.last_message_id
+                    self.__settings.user_id, message_id=self.__settings.last_message_id
                 )
                 return send_request(url, request_data)
         return None
 
     def _send_message(self, message: str, style: MessageStyles = None) -> http.client.HTTPResponse:
-        url = f'{self.base_url}/sendMessage'
+        url = f'{self.__base_url}/sendMessage'
         style_templates = {
             'bold': '*{}*',
             'italic': '__{}__',
@@ -64,7 +64,7 @@ class TelegramStorage(base_storage.BaseStorage):
         style_template = style_templates.get(style)
         if style_template:
             message = style_template.format(message)
-        data = self._prepare_request_data(self.data.user_id, message)
+        data = self._prepare_request_data(self.__settings.user_id, message)
         return send_request(url, data)
 
     @staticmethod

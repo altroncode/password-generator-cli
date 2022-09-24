@@ -2,7 +2,6 @@ import sys
 
 from config.data_sources import data_sources
 from config import settings
-from config import app_data
 import password_info
 import strorages
 import exception
@@ -33,21 +32,22 @@ def create_note() -> str:
 
 storages_dict = {'telegram': strorages.TelegramStorage}
 password_info_builders = {'telegram': password_info.TelegramPasswordInfoBuilder}
-storage_datas = {'telegram': app_data.TelegramData}
+storage_settings = {'telegram': settings.TelegramSettings}
+
 
 for storage_name in general_settings.storages:
-    data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.DATA_PATH)
-    storage_data = storage_datas.get(storage_name)
+    data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(
+        settings.SETTINGS_PATH
+    )
+    storage_data = storage_settings.get(storage_name)
     storage = storages_dict.get(storage_name)(storage_data(source=data_source))
     builder = password_info_builders.get(storage_name)
 
-    password_info_data = app_data.PasswordInfoData(source=data_source)
-    if password_info_data.is_note:
-        password_info_data.note = create_note()
-    telegram_password_director = password_info.PasswordInfoDirector(data=password_info_data)
-    password_info_message = telegram_password_director.create_password_info(
-        builder=builder()
-    )
+    password_info_settings = settings.PasswordInfoSettings(source=data_source)
+    if password_info_settings.is_note:
+        password_info_settings.note = create_note()
+    telegram_password_director = password_info.PasswordInfoDirector(password_info_settings)
+    password_info_message = telegram_password_director.create_password_info(builder=builder())
     try:
         storage.keep(password, password_info_message)
     except exception.KeepPasswordError:
