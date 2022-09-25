@@ -32,7 +32,7 @@ class Password:
             string.ascii_lowercase: self._settings.is_small_letters,
             string.punctuation: self._settings.is_punctuation
         }
-        return [value for key, value in symbol_groups.items() if value]
+        return [key for key, value in symbol_groups.items() if value]
 
     def __str__(self):
         return self._password
