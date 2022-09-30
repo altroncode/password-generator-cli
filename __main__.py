@@ -9,12 +9,13 @@ import strorages
 from config import settings
 from config.data_sources import data_sources
 
-
 arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv[1:])
 
-settings_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(settings.SETTINGS_PATH)
-password_settings = settings.PasswordSettings(source=settings_source)
-general_settings = settings.GeneralSettings(source=settings_source)
+data_source = (data_sources.CLIArgumentsDataSource(arguments) +
+               data_sources.IniDataSource(settings.SETTINGS_PATH) +
+               data_sources.EnvDataSource(settings.ENV_PATH))
+password_settings = settings.PasswordSettings(source=data_source)
+general_settings = settings.GeneralSettings(source=data_source)
 password = arguments.password or str(password.Password(settings=password_settings))
 
 print(password)
@@ -32,15 +33,11 @@ def create_note() -> str:
 
 storages_dict = {'telegram': strorages.TelegramStorage}
 password_info_builders = {'telegram': password_info.TelegramPasswordInfoBuilder}
-storage_settings = {'telegram': settings.TelegramSettings}
-
+storage_settings_dict = {'telegram': settings.TelegramSettings}
 
 for storage_name in general_settings.storages:
-    data_source = data_sources.CLIArgumentsDataSource(arguments) + data_sources.IniDataSource(
-        settings.SETTINGS_PATH
-    )
-    storage_data = storage_settings.get(storage_name)
-    storage = storages_dict.get(storage_name)(storage_data(source=data_source))
+    storage_settings = storage_settings_dict.get(storage_name)
+    storage = storages_dict.get(storage_name)(storage_settings(source=data_source))
     builder = password_info_builders.get(storage_name)
 
     password_info_settings = settings.PasswordInfoSettings(source=data_source)

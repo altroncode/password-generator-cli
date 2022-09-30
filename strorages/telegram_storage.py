@@ -29,7 +29,7 @@ class TelegramStorage(base_storage.BaseStorage):
         try:
             self._delete_closing_message()
             self._send_message(password_info)
-            self._send_message(utils.escape_message(password), style='code')
+            self._send_message(f'`{utils.escape_message(password)}`')
         except urllib.error.HTTPError as e:
             raise exception.KeepPasswordError from e
         finally:
@@ -37,7 +37,7 @@ class TelegramStorage(base_storage.BaseStorage):
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = '*' * 42
-        response = self._send_message(message, style='code')
+        response = self._send_message(f'`{utils.escape_message(message)}`')
         self.__settings.last_message_id = str(json.loads(response.read())['result']['message_id'])
         self.__settings['last_message_id'].save()
         return response
@@ -53,17 +53,8 @@ class TelegramStorage(base_storage.BaseStorage):
                 return send_request(url, request_data)
         return None
 
-    def _send_message(self, message: str, style: MessageStyles = None) -> http.client.HTTPResponse:
+    def _send_message(self, message: str) -> http.client.HTTPResponse:
         url = f'{self.__base_url}/sendMessage'
-        style_templates = {
-            'bold': '*{}*',
-            'italic': '__{}__',
-            'code': '`{}`',
-            'strike': '~{}~',
-        }
-        style_template = style_templates.get(style)
-        if style_template:
-            message = style_template.format(message)
         data = self._prepare_request_data(self.__settings.user_id, message)
         return send_request(url, data)
 

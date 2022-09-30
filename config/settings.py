@@ -1,36 +1,36 @@
 from config.data_models import base_data_model
 from config.data_models.field import Field
 
-
 SETTINGS_PATH = 'password-generator/config/settings.ini'
+ENV_PATH = 'password-generator/.env'
 
 
 class PasswordInfoSettings(base_data_model.BaseModel):
-    _section_name: str = 'password_info'
+    _sections: str = ('password_info',)
 
-    platform: str = Field()
-    login: str = Field()
-    emails: list[str] = Field()
-    is_note: bool = Field()
+    platform: str = Field(env='PLATFORM')
+    login: str = Field(env='LOGIN')
+    emails: list[str] = Field(env='EMAILS')
+    is_note: bool = Field(env='IS_NOTE')
     note: str = Field(init=False)
 
 
 class TelegramSettings(base_data_model.BaseModel):
-    _section_name: str = 'telegram'
+    _sections: tuple[str] = ('telegram',)
 
-    user_id: int = Field()
-    token: str = Field()
-    last_message_id: int = Field()
+    user_id: int = Field(env='USER_ID')
+    token: str = Field(env='TOKEN')
+    last_message_id: int = Field(env='LAST_MESSAGE_ID')
 
 
 class GeneralSettings(base_data_model.BaseModel):
-    _section_name = 'general'
+    _sections: tuple[str] = ('general',)
 
     storages: list[str] = Field()
 
 
 class PasswordSettings(base_data_model.BaseModel):
-    _section_name: str = 'password'
+    _sections: tuple[str] = ('password',)
 
     length: int = Field()
     is_digits: bool = Field()

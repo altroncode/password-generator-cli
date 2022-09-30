@@ -13,7 +13,7 @@ class Password:
         self._password = self.create_password()
 
     def create_password(self) -> str:
-        length: int = self._settings.length
+        length = self._settings.length
         next_symbol: int = 0
         password_symbols: list[str] = [''] * length
         symbol_groups = self._get_symbol_groups()

@@ -5,18 +5,18 @@ from config.data_sources import data_sources
 
 
 class BaseModel:
-    _section_name: str
+    _sections: tuple[str] = ()
 
     def __init__(self, source: data_sources.BaseDataSource) -> None:
         self.__source = source
         for field_name, field in self:
-            if field.init:
-                key = (self._section_name, field.alias or field_name)
-                value = self.__source.provide(key, self.__annotations__[field_name])
-                field.set_key(key)
-                field.set_data_source(self.__source)
-                if value is not None:
-                    field.set_value(value)
+            if not field.init:
+                continue
+            key = data_sources.Key(self._sections, field_name, field.env)
+            field.set_data_source(self.__source).set_key(key).set_value_type(
+                self.__annotations__[field_name]).set_value(
+                field.get_value_from_data_source()
+            )
 
     def __getitem__(self, item: str):
         return self.__class__.__dict__.get(item) or self.__dict__.get(item)
