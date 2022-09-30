@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('--length', '-l', type=int, dest='length', nargs='?')
 parser.add_argument('--platform', '-p', type=str, dest='platform', nargs='?')
-parser.add_argument('--email', '-e', type=str, dest='email')
+parser.add_argument('--email', '-e', type=str, dest='emails', nargs='*')
 parser.add_argument('--login', '-lg', type=str, dest='login', nargs='?')
 parser.add_argument('--storages', '-s', type=str, dest='storages', nargs='*')
 parser.add_argument('--password', '-ps', type=str, dest='password', nargs='?')
