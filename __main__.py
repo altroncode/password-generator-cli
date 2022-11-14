@@ -4,7 +4,7 @@ import cli
 import color
 import exception
 import password
-import password_info
+import credentials
 import strorages
 from config import settings
 from config.data_sources import data_sources
@@ -32,7 +32,7 @@ def create_note() -> str:
 
 
 storages_dict = {'telegram': strorages.TelegramStorage}
-password_info_builders = {'telegram': password_info.TelegramPasswordInfoBuilder}
+password_info_builders = {'telegram': credentials.TelegramPasswordInfoBuilder}
 storage_settings_dict = {'telegram': settings.TelegramSettings}
 
 for storage_name in general_settings.storages:
@@ -43,7 +43,7 @@ for storage_name in general_settings.storages:
     password_info_settings = settings.PasswordInfoSettings(source=data_source)
     if password_info_settings.is_note:
         password_info_settings.note = create_note()
-    telegram_password_director = password_info.PasswordInfoDirector(password_info_settings)
+    telegram_password_director = credentials.PasswordInfoDirector(password_info_settings)
     password_info_message = telegram_password_director.create_password_info(builder=builder())
     try:
         storage.keep(password, password_info_message)
