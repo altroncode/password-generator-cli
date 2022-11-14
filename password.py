@@ -21,7 +21,7 @@ class Password:
             password_symbols[next_symbol:] = [
                 secrets.choice(symbols) for _ in range(length - next_symbol)
             ]
-            next_symbol = random.randint(next_symbol+1, length-(len(symbol_groups) - i))
+            next_symbol = random.randint(next_symbol + 1, length - (len(symbol_groups) - i))
         random.shuffle(password_symbols)
         return ''.join(password_symbols)
 
