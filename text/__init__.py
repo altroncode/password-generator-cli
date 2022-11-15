@@ -1,4 +1,5 @@
-from .text import Text
+from .color import Colors
 
 
-__all__ = ('Text',)
+__all__ = ('Colors',)
+
