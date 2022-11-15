@@ -1,2 +1,2 @@
-class KeepPasswordError(Exception):
+class SavingPasswordError(Exception):
     pass
