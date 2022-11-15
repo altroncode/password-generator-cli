@@ -5,6 +5,12 @@ SETTINGS_PATH = 'password-generator/config/settings.ini'
 ENV_PATH = 'password-generator/.env'
 
 
+class AppSettings(base_data_model.BaseModel):
+    _sections: tuple[str] = ('app',)
+
+    storages: list[str] = Field()
+
+
 class CredentialsSettings(base_data_model.BaseModel):
     _sections: str = ('password_info',)
 
@@ -21,12 +27,6 @@ class TelegramSettings(base_data_model.BaseModel):
     user_id: int = Field(env='USER_ID')
     token: str = Field(env='TOKEN')
     last_message_id: int = Field(env='LAST_MESSAGE_ID')
-
-
-class GeneralSettings(base_data_model.BaseModel):
-    _sections: tuple[str] = ('general',)
-
-    storages: list[str] = Field()
 
 
 class PasswordSettings(base_data_model.BaseModel):
