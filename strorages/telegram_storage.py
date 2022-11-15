@@ -6,7 +6,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-import exception
+import exceptions
 import utils
 from config import settings
 from strorages import base_storage
@@ -31,7 +31,7 @@ class TelegramStorage(base_storage.BaseStorage):
             self._send_message(password_info)
             self._send_message(f'`{utils.escape_message(password)}`')
         except urllib.error.HTTPError as e:
-            raise exception.KeepPasswordError from e
+            raise exception.SavingPasswordError from e
         finally:
             self._send_closing_message()
 
