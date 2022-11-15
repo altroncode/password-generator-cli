@@ -5,14 +5,12 @@ import string
 import config
 
 
-class Password:
-    __slots__ = ('_settings', '_password')
+class PasswordFactory:
 
     def __init__(self, settings: config.settings.PasswordSettings):
         self._settings = settings
-        self._password = self.create_password()
 
-    def create_password(self) -> str:
+    def create_password(self) -> 'Password':
         length = self._settings.length
         next_symbol: int = 0
         password_symbols: list[str] = [''] * length
@@ -23,7 +21,7 @@ class Password:
             ]
             next_symbol = random.randint(next_symbol + 1, length - (len(symbol_groups) - i))
         random.shuffle(password_symbols)
-        return ''.join(password_symbols)
+        return Password(''.join(password_symbols))
 
     def _get_symbol_groups(self):
         symbol_groups: dict = {
@@ -33,6 +31,13 @@ class Password:
             string.punctuation: self._settings.is_punctuation
         }
         return [key for key, value in symbol_groups.items() if value]
+
+
+class Password:
+    __slots__ = ('_settings', '_password')
+
+    def __init__(self, password: str):
+        self._password = password
 
     def __str__(self):
         return self._password
