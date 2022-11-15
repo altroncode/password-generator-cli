@@ -2,12 +2,14 @@ import sys
 
 import cli
 import color
-import exception
-import password
 import credentials
+import exception
+import note
+import password
 import strorages
 from config import settings
 from config.data_sources import data_sources
+
 
 arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv[1:])
 
@@ -20,17 +22,6 @@ password = arguments.password or str(password.Password(settings=password_setting
 
 print(password)
 
-
-def create_note() -> str:
-    note = []
-    print()
-    line = input("Note: ")
-    while line:
-        note.append(line)
-        line = input()
-    return '\n'.join(note)
-
-
 storages_dict = {'telegram': strorages.TelegramStorage}
 password_info_builders = {'telegram': credentials.TelegramPasswordInfoBuilder}
 storage_settings_dict = {'telegram': settings.TelegramSettings}
@@ -42,7 +33,7 @@ for storage_name in general_settings.storages:
 
     password_info_settings = settings.PasswordInfoSettings(source=data_source)
     if password_info_settings.is_note:
-        password_info_settings.note = create_note()
+        password_info_settings.note = note.CLINoteFactory().create_note()
     telegram_password_director = credentials.PasswordInfoDirector(password_info_settings)
     password_info_message = telegram_password_director.create_password_info(builder=builder())
     try:
