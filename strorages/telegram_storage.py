@@ -15,10 +15,6 @@ from strorages import base_storage
 MessageStyles = typing.Literal['bold', 'italic', 'code', 'strike', 'underline']
 
 
-def send_http_request(url: str, data: bytes) -> http.client.HTTPResponse:
-    return urllib.request.urlopen(url, data)
-
-
 class TelegramStorage(base_storage.BaseStorage):
 
     def __init__(self, telegram_settings: settings.TelegramSettings) -> None:
