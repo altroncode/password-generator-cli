@@ -12,7 +12,7 @@ class AppSettings(base_data_model.BaseModel):
 
 
 class CredentialsSettings(base_data_model.BaseModel):
-    _sections: str = ('password_info',)
+    _sections: str = ('credentials',)
 
     platform: str = Field(env='PLATFORM')
     login: str = Field(env='LOGIN')
