@@ -5,7 +5,7 @@ SETTINGS_PATH = 'password-generator/config/settings.ini'
 ENV_PATH = 'password-generator/.env'
 
 
-class PasswordInfoSettings(base_data_model.BaseModel):
+class CredentialsSettings(base_data_model.BaseModel):
     _sections: str = ('password_info',)
 
     platform: str = Field(env='PLATFORM')
