@@ -15,7 +15,7 @@ from strorages import base_storage
 MessageStyles = typing.Literal['bold', 'italic', 'code', 'strike', 'underline']
 
 
-def send_request(url: str, data: bytes) -> http.client.HTTPResponse:
+def send_http_request(url: str, data: bytes) -> http.client.HTTPResponse:
     return urllib.request.urlopen(url, data)
 
 
@@ -50,13 +50,13 @@ class TelegramStorage(base_storage.BaseStorage):
                 request_data = self._prepare_request_data(
                     self.__settings.user_id, message_id=self.__settings.last_message_id
                 )
-                return send_request(url, request_data)
+                return send_http_request(url, request_data)
         return None
 
     def _send_message(self, message: str) -> http.client.HTTPResponse:
         url = f'{self.__base_url}/sendMessage'
         data = self._prepare_request_data(self.__settings.user_id, message)
-        return send_request(url, data)
+        return send_http_request(url, data)
 
     @staticmethod
     def _prepare_request_data(chat_id: int, text: str = "", **kwargs) -> bytes:
