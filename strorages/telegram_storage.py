@@ -12,9 +12,6 @@ from config import settings
 from strorages import base_storage
 
 
-MessageStyles = typing.Literal['bold', 'italic', 'code', 'strike', 'underline']
-
-
 class TelegramStorage(base_storage.BaseStorage):
 
     def __init__(self, telegram_settings: settings.TelegramSettings) -> None:
