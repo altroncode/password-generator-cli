@@ -55,7 +55,7 @@ class TelegramStorage(base_storage.BaseStorage):
     def _prepare_request_data(chat_id: int, text: str = "", **kwargs) -> bytes:
         data = {
             "text": text,
-            "parse_mode": "MarkdownV2",
+            "parse_mode": "HTML",
             "chat_id": chat_id
         }
         return urllib.parse.urlencode(data | kwargs).encode("utf-8")
