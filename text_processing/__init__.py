@@ -1,2 +1,2 @@
-from .color import Colors
+from .color import *
 from .text_processing import *

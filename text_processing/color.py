@@ -2,6 +2,9 @@ import enum
 import random
 
 
+__all__ = ('Color', 'StatusColor')
+
+
 class Color(str, enum.Enum):
     RED: str = random.choice(('\033[31m', '\033[91m'))
     GREEN: str = random.choice(('\033[32m', '\033[92m'))
