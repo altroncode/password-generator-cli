@@ -1,5 +1,2 @@
 from .color import Colors
-
-
-__all__ = ('Colors',)
-
+from .text_processing import *
