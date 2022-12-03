@@ -10,5 +10,5 @@ class BaseStorage(abc.ABC):
         self._settings = settings
 
     @abc.abstractmethod
-    def keep(self, password_: password.Password, credentials_: str) -> None:
+    def keep(self, password_: password.Password, credentials_: str, note: str) -> None:
         pass
