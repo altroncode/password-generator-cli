@@ -9,7 +9,7 @@ import urllib.request
 import exceptions
 import utils
 from config import settings
-from strorages import base_storage
+from storages import base_storage
 
 
 class TelegramStorage(base_storage.BaseStorage):
