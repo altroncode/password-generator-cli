@@ -48,7 +48,7 @@ class CredentialsDirector:
     def __init__(self, credentials_settings: settings.CredentialsSettings):
         self._settings = credentials_settings
 
-    def create_password_info(self, builder: BaseCredentialsBuilder):
+    def create_credentials(self, builder: BaseCredentialsBuilder):
         platform = self._settings.platform
         login = self._settings.login
         if platform is not None:
