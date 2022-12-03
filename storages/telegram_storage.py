@@ -1,7 +1,6 @@
 import contextlib
 import http.client
 import json
-import typing
 import urllib.error
 import urllib.parse
 import urllib.request
