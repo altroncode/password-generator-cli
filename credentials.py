@@ -5,7 +5,7 @@ import text_processing
 from config import settings
 
 
-class BaseCredentialsBuilder(typing.Protocol):
+class BaseCredentialsBuilder(abc.ABC):
 
     def get_credentials(self) -> str:
         pass
@@ -20,7 +20,7 @@ class BaseCredentialsBuilder(typing.Protocol):
         pass
 
 
-class CredentialsSentToTelegramBuilder:
+class CredentialsSentToTelegramBuilder(BaseCredentialsBuilder):
 
     def __init__(self):
         self._credentials = ''
