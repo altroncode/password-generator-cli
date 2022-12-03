@@ -2,7 +2,7 @@ import abc
 import typing
 
 
-__all__ = ('BaseTextProcessing', 'SimpleTextProcessing', 'TelegramFormatting')
+__all__ = ('BaseTextProcessing', 'SimpleTextProcessing', 'TelegramTextProcessing')
 
 
 TelegramFormatting: typing.TypeAlias = typing.Literal['bold', 'code', 'pre', 'underline', 'strike']
