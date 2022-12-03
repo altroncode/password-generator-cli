@@ -1,11 +1,10 @@
-import abc
 import typing
 
 import text_processing
 from config import settings
 
 
-class BaseCredentialsBuilder(abc.ABC):
+class BaseCredentialsBuilder(typing.Protocol):
 
     def get_credentials(self) -> str:
         pass
@@ -20,7 +19,7 @@ class BaseCredentialsBuilder(abc.ABC):
         pass
 
 
-class CredentialsSentToTelegramBuilder(BaseCredentialsBuilder):
+class CredentialsSentToTelegramBuilder:
 
     def __init__(self):
         self._credentials = ''
