@@ -7,6 +7,8 @@ import urllib.parse
 import urllib.request
 
 import exceptions
+import password
+import text_processing
 import utils
 from config import settings
 from storages import base_storage
@@ -17,12 +19,13 @@ class TelegramStorage(base_storage.BaseStorage):
     def __init__(self, telegram_settings: settings.TelegramSettings) -> None:
         self.__settings = telegram_settings
         self.__base_url = f'https://api.telegram.org/bot{self.__settings.token}'
+        self.__text_processing = text_processing.TelegramTextProcessing()
 
     def keep(self, password: str, password_info: str) -> None:
         try:
             self._delete_closing_message()
             self._send_message(password_info)
-            self._send_message(f'`{utils.escape_message(password)}`')
+            self._send_message(f'`{self.__text_processing.escape_text(str(password_))}`')
         except urllib.error.HTTPError as e:
             raise exceptions.SavingPasswordError from e
         finally:
@@ -30,7 +33,7 @@ class TelegramStorage(base_storage.BaseStorage):
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = '*' * 42
-        response = self._send_message(f'`{utils.escape_message(message)}`')
+        response = self._send_message(f'`{self.__text_processing.escape_text(message)}`')
         self.__settings.last_message_id = str(json.loads(response.read())['result']['message_id'])
         self.__settings['last_message_id'].save()
         return response
