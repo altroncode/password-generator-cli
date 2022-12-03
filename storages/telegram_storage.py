@@ -21,10 +21,10 @@ class TelegramStorage(base_storage.BaseStorage):
         self.__base_url = f'https://api.telegram.org/bot{self.__settings.token}'
         self.__text_processing = text_processing.TelegramTextProcessing()
 
-    def keep(self, password_: password.Password, password_info: str) -> None:
+    def keep(self, password_: password.Password, credentials: str) -> None:
         try:
             self._delete_closing_message()
-            self._send_message(password_info)
+            self._send_message(credentials)
             self._send_message(f'`{self.__text_processing.escape_text(str(password_))}`')
         except urllib.error.HTTPError as e:
             raise exceptions.SavingPasswordError from e
