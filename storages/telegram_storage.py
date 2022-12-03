@@ -21,7 +21,7 @@ class TelegramStorage(base_storage.BaseStorage):
         self.__base_url = f'https://api.telegram.org/bot{self.__settings.token}'
         self.__text_processing = text_processing.TelegramTextProcessing()
 
-    def keep(self, password: str, password_info: str) -> None:
+    def keep(self, password_: password.Password, password_info: str) -> None:
         try:
             self._delete_closing_message()
             self._send_message(password_info)
