@@ -17,6 +17,7 @@ from storages import base_storage
 class TelegramStorage(base_storage.BaseStorage):
 
     def __init__(self, telegram_settings: settings.TelegramSettings) -> None:
+        super().__init__(telegram_settings)
         self.__settings = telegram_settings
         self.__base_url = f'https://api.telegram.org/bot{self.__settings.token}'
         self.__text_processing = text_processing.TelegramTextProcessing()
