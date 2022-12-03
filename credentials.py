@@ -19,7 +19,7 @@ class BaseCredentialsBuilder(typing.Protocol):
         pass
 
 
-class CredentialSentToTelegramBuilder:
+class CredentialsSentToTelegramBuilder:
 
     def __init__(self):
         self._credentials = ''
