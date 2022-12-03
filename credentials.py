@@ -1,3 +1,4 @@
+import abc
 import typing
 
 import text_processing
@@ -25,7 +26,7 @@ class CredentialsSentToTelegramBuilder:
         self._credentials = ''
         self.__text_processing = text_processing.TelegramTextProcessing()
 
-    def get_password_info(self) -> str:
+    def get_credentials(self) -> str:
         return self._credentials
 
     def set_platform(self, platform: str) -> str:
