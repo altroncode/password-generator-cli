@@ -1,12 +1,11 @@
 import sys
-import typing
 
 import cli
 import note
 import password
+import password_saving_strategy
 from config import settings
 from config.data_sources import data_sources
-import password_saving_strategy
 
 
 def main():
@@ -22,17 +21,15 @@ def main():
     app_settings = settings.AppSettings(data_source)
     credentials_settings = settings.CredentialsSettings(data_source)
 
-    password_ = (password.Password(arguments.password) or
-                 password.PasswordFactory(settings=password_settings))
+    password_ = password.Password(arguments.password) or password.PasswordFactory(settings=password_settings)
     print(password_)
 
-    password_saving_strategies: dict[str, typing.Type[password_saving_strategy.BasePasswordSavingStrategy]] = {
-        'telegram': password_saving_strategy.PasswordSavingToTelegramStrategy
+    password_saving_strategies = {
+        'telegram': password_saving_strategy.PasswordSavingToTelegramStrategy()
     }
 
     for password_saving_method in app_settings.storages:
-        strategy: password_saving_strategy.BasePasswordSavingStrategy = \
-            password_saving_strategies.get(password_saving_method)()
+        strategy = password_saving_strategies.get(password_saving_method)
         note_ = note.CLINoteFactory().create_note() if credentials_settings.is_note else None
         strategy.save_password(data_source, credentials_settings, password_, note_)
 
