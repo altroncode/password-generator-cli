@@ -43,4 +43,4 @@ class PasswordSavingToTelegramStrategy(BasePasswordSavingStrategy):
         PasswordSavingStrategy(
             storages.TelegramStorage, settings.TelegramSettings, credentials_settings,
             credentials.CredentialsSentToTelegramBuilder, data_source, password_, note
-        )
+        ).save_password()
