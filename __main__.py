@@ -17,11 +17,15 @@ def main():
             data_sources.EnvDataSource(settings.ENV_PATH)
     )
 
-    password_settings = settings.PasswordSettings(data_source)
     app_settings = settings.AppSettings(data_source)
+    password_settings = settings.PasswordSettings(data_source)
     credentials_settings = settings.CredentialsSettings(data_source)
 
-    password_ = password.Password(arguments.password) or password.PasswordFactory(settings=password_settings)
+    if arguments.password:
+        password_ = password.Password(arguments.password)
+    else:
+        password_ = password.PasswordFactory(settings=password_settings).create_password()
+
     print(password_)
 
     password_saving_strategies = {
