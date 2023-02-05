@@ -1,8 +1,8 @@
 import typing
 
 import text_processing
-from config import settings
 from text_processing import html_tags
+from config import settings
 
 
 class BaseCredentialsBuilder(typing.Protocol):
@@ -32,20 +32,17 @@ class CredentialsSentToTelegramBuilder:
     def set_platform(self, platform: str) -> str:
         field_name = self.__text_processing.format_text("Platform", html_tags.BoldTag())
         self._credentials += f'\n{field_name}: {self.__text_processing.escape_text(platform)}'
-        self._credentials.lstrip('\n')
-        return self._credentials
+        return self._credentials.lstrip('\n')
 
     def set_login(self, login: str) -> str:
         field_name = self.__text_processing.format_text("Login", html_tags.BoldTag())
         self._credentials += f'\n{field_name}: {self.__text_processing.escape_text(login)}'
-        self._credentials.lstrip('\n')
-        return self._credentials
+        return self._credentials.lstrip('\n')
 
     def set_email(self, email: str) -> str:
         field_name = self.__text_processing.format_text("Email", html_tags.BoldTag())
         self._credentials += f'\n{field_name}: {self.__text_processing.escape_text(email)}'
-        self._credentials.lstrip('\n')
-        return self._credentials
+        return self._credentials.lstrip('\n')
 
 
 class CredentialsDirector:
