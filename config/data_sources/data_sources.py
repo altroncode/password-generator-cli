@@ -95,7 +95,7 @@ class EnvDataSource(WritableDataSource):
                     secondary_type = value_type.__args__[0]
                     value = value.replace('[', '').replace(']', '')
                     value = value.replace("'", '').replace('"', '')
-                    return [secondary_type(j) for j in value.split(', ')]
+                    return [secondary_type(j) for j in value.split(', ') if j]
                 return cast_value_to_type(value, value_type) if value != '' else None
 
     def check_is_key_exists(self, key: Key) -> bool:
@@ -138,7 +138,8 @@ class IniDataSource(WritableDataSource):
                 values = self._parser.get(key.sections[-1], key.key, fallback='')
                 values = values.split(self._separator)
                 for index, value in enumerate(values):
-                    values[index] = cast_value_to_type(value, secondary_type)
+                    if value:
+                        values[index] = cast_value_to_type(value, secondary_type)
                 return primary_type(values)
         else:
             value = self._parser.get(key.sections[-1], key.key, fallback=None)
