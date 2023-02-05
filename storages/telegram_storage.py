@@ -11,6 +11,7 @@ import text_processing
 import utils
 from config import settings
 from storages import base_storage
+from text_processing import html_tags
 
 
 class TelegramStorage(base_storage.BaseStorage):
@@ -32,8 +33,8 @@ class TelegramStorage(base_storage.BaseStorage):
             self._send_closing_message()
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
-        message = '*' * 42
-        response = self._send_message(f'`{self.__text_processing.escape_text(message)}`')
+        message = self.__text_processing.format_text('*' * 42, html_tags.CodeTag())
+        response = self._send_message(message)
         self.__settings.last_message_id = str(json.loads(response.read())['result']['message_id'])
         self.__settings['last_message_id'].save()
         return response
