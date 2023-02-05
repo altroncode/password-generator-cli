@@ -38,7 +38,7 @@ class HTMLProcessing(BaseTextProcessing):
 
     def format_text(self, text: str, tag: html_tags.HTMLTag) -> str:
         html_attributes = ' '.join([f'{name}="{value}"' for name, value in tag.attributes.items()])
-        pattern = f'<{tag.name} {html_attributes}>{{}}<\\{tag.name}>'
+        pattern = f'<{tag.name} {html_attributes}>{{}}</{tag.name}>'
         return pattern.format(text)
 
 
