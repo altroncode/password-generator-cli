@@ -3,7 +3,7 @@ import abc
 from text_processing import html_tags
 
 
-__all__ = ('BaseTextProcessing', 'SimpleTextProcessing', 'TelegramTextProcessing')
+__all__ = ('BaseTextProcessing', 'SimpleTextProcessing', 'HTMLProcessing', 'TelegramTextProcessing')
 
 
 class BaseTextProcessing(abc.ABC):
