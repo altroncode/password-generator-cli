@@ -52,9 +52,11 @@ class LinkTag(TelegramTag):
 
 
 class CodeTag(TelegramTag):
-    def __init__(self, language: str) -> None:
+    def __init__(self, language: str = None) -> None:
         self.name = 'code'
-        self.attributes = {'class': f'language-{language}'}
+        self.attributes = {}
+        if language is not None:
+            self.attributes['class'] = f'language-{language}'
 
 
 class PreTag(TelegramTag):
