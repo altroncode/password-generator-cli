@@ -54,4 +54,4 @@ class TelegramTextProcessing(BaseTextProcessing):
         return text
 
     def format_text(self, text: str, formatting_tag: html_tags.TelegramTag):
-        self.__html_processing.format_text(text, formatting_tag)
+        return self.__html_processing.format_text(text, formatting_tag)
