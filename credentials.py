@@ -29,20 +29,23 @@ class CredentialsSentToTelegramBuilder:
     def get_credentials(self) -> str:
         return self._credentials
 
-    def set_platform(self, platform: str) -> str:
+    def set_platform(self, platform: str) -> typing.Self:
         field_name = self.__text_processing.format_text("Platform", html_tags.BoldTag())
         self._credentials += f'\n{field_name}: {self.__text_processing.escape_text(platform)}'
-        return self._credentials.lstrip('\n')
+        self._credentials = self._credentials.lstrip('\n')
+        return self
 
-    def set_login(self, login: str) -> str:
+    def set_login(self, login: str) -> typing.Self:
         field_name = self.__text_processing.format_text("Login", html_tags.BoldTag())
         self._credentials += f'\n{field_name}: {self.__text_processing.escape_text(login)}'
-        return self._credentials.lstrip('\n')
+        self._credentials = self._credentials.lstrip('\n')
+        return self
 
-    def set_email(self, email: str) -> str:
+    def set_email(self, email: str) -> typing.Self:
         field_name = self.__text_processing.format_text("Email", html_tags.BoldTag())
         self._credentials += f'\n{field_name}: {self.__text_processing.escape_text(email)}'
-        return self._credentials.lstrip('\n')
+        self._credentials = self._credentials.lstrip('\n')
+        return self
 
 
 class CredentialsDirector:
