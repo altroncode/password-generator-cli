@@ -1,11 +1,9 @@
 import abc
-import typing
+
+from text_processing import html_tags
 
 
 __all__ = ('BaseTextProcessing', 'SimpleTextProcessing', 'TelegramTextProcessing')
-
-
-TelegramFormatting: typing.TypeAlias = typing.Literal['bold', 'code', 'pre', 'underline', 'strike']
 
 
 class BaseTextProcessing(abc.ABC):
@@ -30,10 +28,25 @@ class SimpleTextProcessing(BaseTextProcessing):
         return text
 
 
+class HTMLProcessing(BaseTextProcessing):
+
+    def escape_text(self, text: str) -> str:
+        return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+    def color_text(self, text: str, color: str) -> str:
+        return text
+
+    def format_text(self, text: str, tag: html_tags.HTMLTag) -> str:
+        html_attributes = ' '.join([f'{name}="{value}"' for name, value in tag.attributes.items()])
+        pattern = f'<{tag.name} {html_attributes}>{{}}<\\{tag.name}>'
+        return pattern.format(text)
+
+
 class TelegramTextProcessing(BaseTextProcessing):
 
     def __init__(self):
         self.__simple_text_processing = SimpleTextProcessing()
+        self.__html_processing = HTMLProcessing()
 
     def escape_text(self, text: str) -> str:
         return self.__simple_text_processing.escape_text(text)
@@ -41,19 +54,5 @@ class TelegramTextProcessing(BaseTextProcessing):
     def color_text(self, text: str, color: str) -> str:
         return text
 
-    def format_text(self, text: str, formatting: TelegramFormatting) -> str:
-        pattern = self.__get_formatting_pattern(formatting)
-        return pattern.format(text)
-
-    def __get_formatting_pattern(self, formatting: TelegramFormatting) -> str:
-        tags = self.__get_formatting_tags()
-        tag = tags[formatting]
-        return f'<{tag}>{{}}<\\{tag}>'
-
-    @staticmethod
-    def __get_formatting_tags() -> dict[TelegramFormatting: str]:
-        return {
-            'bold': 'b', 'italic': 'i',
-            'underline': 'u', 'strike': 's',
-            'code': 'code', 'pre': 'pre'
-        }
+    def format_text(self, text: str, formatting_tag: html_tags.TelegramTag):
+        self.__html_processing.format_text(text, formatting_tag)
