@@ -45,11 +45,10 @@ class HTMLProcessing(BaseTextProcessing):
 class TelegramTextProcessing(BaseTextProcessing):
 
     def __init__(self):
-        self.__simple_text_processing = SimpleTextProcessing()
         self.__html_processing = HTMLProcessing()
 
     def escape_text(self, text: str) -> str:
-        return self.__simple_text_processing.escape_text(text)
+        return self.__html_processing.escape_text(text)
 
     def color_text(self, text: str, color: str) -> str:
         return text
