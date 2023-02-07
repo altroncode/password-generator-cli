@@ -34,7 +34,6 @@ class TelegramStorage(base_storage.BaseStorage):
         finally:
             self._send_closing_message()
 
-
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = self.__text_processing.format_text('*' * 42, html_tags.CodeTag())
         response = self._send_message(message)
@@ -48,14 +47,14 @@ class TelegramStorage(base_storage.BaseStorage):
             with contextlib.suppress(urllib.error.URLError):
                 url = f'{self.__base_url}/deleteMessage'
                 request_data = self._prepare_request_data(
-                    self.__settings.user_id, message_id=self.__settings.last_message_id
+                    self.__settings.chat_id, message_id=self.__settings.last_message_id
                 )
                 return utils.send_http_request(url, request_data)
         return None
 
     def _send_message(self, message: str) -> http.client.HTTPResponse:
         url = f'{self.__base_url}/sendMessage'
-        data = self._prepare_request_data(self.__settings.user_id, message)
+        data = self._prepare_request_data(self.__settings.chat_id, message)
         return utils.send_http_request(url, data)
 
     @staticmethod

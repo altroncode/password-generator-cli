@@ -28,7 +28,7 @@ class CredentialsSettings(base_data_model.BaseModel):
 class TelegramSettings(base_data_model.BaseModel):
     _sections: tuple[str] = ('telegram',)
 
-    user_id: int = Field(env='USER_ID')
+    chat_id: int = Field(env='CHAT_ID')
     token: str = Field(env='TOKEN')
     last_message_id: int = Field(env='LAST_MESSAGE_ID')
 
