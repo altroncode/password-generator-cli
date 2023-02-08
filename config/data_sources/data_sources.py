@@ -24,6 +24,8 @@ def cast_value_to_type(value: str, value_type: type):
             case 'False' | 'false' | 'No' | 'no' | '0' | '':
                 return False
     if value_type in (int, float):
+        if value[0] == '-':
+            value = value[1:]
         if not value.replace('.', '').isdigit():
             return None
     return value_type(value) if value else None
