@@ -21,14 +21,14 @@ def cast_value_to_type(value: str, value_type: type):
         match value:
             case 'True' | 'true' | 'Yes' | 'yes' | '1':
                 return True
-            case 'False' | 'false' | 'No' | 'no' | '0' | '':
+            case 'False' | 'false' | 'No' | 'no' | '0':
                 return False
     if value_type in (int, float):
-        if value[0] == '-':
-            value = value[1:]
-        if not value.replace('.', '').isdigit():
-            return None
-    return value_type(value) if value else None
+        value = value.replace(',', '.')
+    try:
+        return value_type(value) if value else None
+    except ValueError:
+        return None
 
 
 class BaseDataSource(abc.ABC):
