@@ -25,10 +25,14 @@ class TelegramStorage(base_storage.BaseStorage):
     def keep(self, password_: password.Password, credentials: str, note: str = None) -> None:
         try:
             self._delete_closing_message()
-            self._send_message(f'{credentials}\n\n{note or ""}'.rstrip('\n'))
+            credentials_message = f'{credentials}\n\n{note or ""}'.rstrip('\n')
+            self._send_message(credentials_message, self.__settings.chat_id)
             formatted_password = self.__text_processing.escape_text(str(password_))
             formatted_password = self.__text_processing.format_text(formatted_password, html_tags.CodeTag())
-            self._send_message(formatted_password)
+            self._send_message(formatted_password, self.__settings.chat_id)
+            if self.__settings.is_archive:
+                self._send_message(credentials_message, self.__settings.archive_chat_id)
+                self._send_message(formatted_password, self.__settings.archive_chat_id)
         except urllib.error.HTTPError as e:
             raise exceptions.SavingPasswordError from e
         finally:
@@ -36,7 +40,7 @@ class TelegramStorage(base_storage.BaseStorage):
 
     def _send_closing_message(self) -> http.client.HTTPResponse:
         message = self.__text_processing.format_text('*' * 42, html_tags.CodeTag())
-        response = self._send_message(message)
+        response = self._send_message(message, self.__settings.chat_id)
         self.__settings.last_message_id = str(json.loads(response.read())['result']['message_id'])
         self.__settings['last_message_id'].save()
         return response
@@ -52,9 +56,9 @@ class TelegramStorage(base_storage.BaseStorage):
                 return utils.send_http_request(url, request_data)
         return None
 
-    def _send_message(self, message: str) -> http.client.HTTPResponse:
+    def _send_message(self, message: str, chat_id: int) -> http.client.HTTPResponse:
         url = f'{self.__base_url}/sendMessage'
-        data = self._prepare_request_data(self.__settings.chat_id, message)
+        data = self._prepare_request_data(chat_id, message)
         return utils.send_http_request(url, data)
 
     @staticmethod

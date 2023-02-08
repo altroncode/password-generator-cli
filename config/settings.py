@@ -10,7 +10,7 @@ ENV_PATH = APP_PATH / '.env'
 
 
 class AppSettings(base_data_model.BaseModel):
-    _sections: tuple[str] = ('app',)
+    _sections: tuple[str] = ('general',)
 
     storages: list[str] = Field()
 
@@ -26,10 +26,12 @@ class CredentialsSettings(base_data_model.BaseModel):
 
 
 class TelegramSettings(base_data_model.BaseModel):
-    _sections: tuple[str] = ('telegram',)
+    _sections: tuple[str] = ('telegram-storage',)
 
     chat_id: int = Field(env='CHAT_ID')
     token: str = Field(env='TOKEN')
+    is_archive: bool = Field()
+    archive_chat_id: int = Field(env='TELEGRAM_ARCHIVE_CHAT_ID')
     last_message_id: int = Field(env='LAST_MESSAGE_ID')
 
 
