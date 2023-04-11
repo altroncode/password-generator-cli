@@ -9,7 +9,10 @@ from config.data_sources import data_sources
 
 
 def main():
-    arguments = cli.get_arguments(argument_parser=cli.parser, args=sys.argv[1:])
+    parser = cli.create_parser()
+    cli.configure_parser(parser)
+
+    arguments = cli.get_arguments(argument_parser=parser, args=sys.argv[1:])
 
     data_source = (
             data_sources.CLIArgumentsDataSource(arguments) +
