@@ -41,9 +41,8 @@ class BaseDataSource(abc.ABC):
     def check_is_key_exists(self, key: Key) -> bool:
         pass
 
-    @abc.abstractmethod
     def __add__(self, other: 'BaseDataSource'):
-        pass
+        return OtherDataSource([self, other])
 
 
 class WritableDataSource(BaseDataSource, abc.ABC):
@@ -118,9 +117,6 @@ class EnvDataSource(WritableDataSource):
         file = open(self.__path, 'w')
         file.writelines(lines)
 
-    def __add__(self, other: 'BaseDataSource') -> OtherDataSource:
-        return OtherDataSource([self, other])
-
 
 class IniDataSource(WritableDataSource):
     __slots__ = ('_parser', '_separator', '_parser_path', '_parser')
@@ -155,9 +151,6 @@ class IniDataSource(WritableDataSource):
         with open(self._parser_path, 'w') as file:
             self._parser.write(file)
 
-    def __add__(self, other: BaseDataSource) -> BaseDataSource:
-        return OtherDataSource([self, other])
-
 
 class CLIArgumentsDataSource(BaseDataSource):
     __slots__ = ('arguments',)
@@ -172,6 +165,3 @@ class CLIArgumentsDataSource(BaseDataSource):
 
     def check_is_key_exists(self, key: Key) -> bool:
         return hasattr(self.arguments, key.key)
-
-    def __add__(self, other: BaseDataSource) -> BaseDataSource:
-        return OtherDataSource([self, other])
