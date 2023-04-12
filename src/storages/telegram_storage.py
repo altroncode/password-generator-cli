@@ -5,13 +5,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-import exceptions
-import password
-import text_processing
-import utils
-from config import settings
-from storages import base_storage
-from text_processing import html_tags
+from src import text_processing, utils, exceptions, password
+from src.config import settings
+from src.storages import base_storage
+from src.text_processing import html_tags
 
 
 class TelegramStorage(base_storage.BaseStorage):

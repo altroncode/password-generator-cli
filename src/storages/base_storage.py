@@ -1,7 +1,6 @@
 import abc
 
-import config.data_models
-import password
+from src import config, password
 
 
 class BaseStorage(abc.ABC):

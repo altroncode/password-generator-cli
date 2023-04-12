@@ -53,7 +53,7 @@ cp "$source_path"/README.md "$installation_path"
 chmod +x "$installation_path"/__main__.py
 
 if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
-  case basename $SHELL in
+  case $(basename "$SHELL") in
   "zsh")
     echo "export PATH=\$PATH:\$HOME/.local/bin" >>~/.zshrc
     ;;

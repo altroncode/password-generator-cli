@@ -1,6 +1,6 @@
 import abc
 
-from text_processing import html_tags
+from src.text_processing import html_tags
 
 
 __all__ = ('BaseTextProcessing', 'SimpleTextProcessing', 'HTMLProcessing', 'TelegramTextProcessing')
