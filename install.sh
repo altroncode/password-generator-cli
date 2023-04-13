@@ -36,7 +36,9 @@ done
 
 if $is_delete; then
   rm -rf "$installation_path"
-  unlink password-gen
+  if [ -L ~/.local/bin/password-gen ]; then
+    unlink ~/.local/bin/password-gen
+  fi
   exit 0
 fi
 
@@ -50,6 +52,14 @@ fi
 cp -r "$source_path/src" "$installation_path"
 cp "$source_path"/.env.dist "$installation_path"
 cp "$source_path"/README.md "$installation_path"
+
+if ! [[ -e "$installation_path"/.env ]]; then
+  while IFS= read -r line; do
+    key=$(echo "$line" | awk '{print $1}')
+    echo "${key%?}"= >> "$installation_path"/.env
+  done < "$source_path"/.env.dist
+fi
+
 chmod +x "$installation_path"/__main__.py
 
 if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
@@ -63,4 +73,14 @@ if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
   esac
 fi
 
+if ! [[ -d ~/.local/bin ]]; then
+  mkdir ~/.local/bin
+fi
+
 ln -sf "$installation_path"/__main__.py ~/.local/bin/password-gen
+
+# TODO
+# create .env automatically
+# add update script
+# create configparsers
+# add documentation
