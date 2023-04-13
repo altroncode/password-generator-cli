@@ -46,6 +46,11 @@ if $is_delete; then
   exit 0
 fi
 
+if ! [[ -d .git ]]; then
+  echo -e "${RED}Installation must take place in the development directory${RESET}"
+  exit 1
+fi
+
 if [[ -d "$installation_path" ]] && ! $force_mode; then
   echo -e "${RED}Directory already exists${RESET}"
   exit 1
@@ -56,6 +61,8 @@ fi
 cp -r "$source_path/src" "$installation_path"
 cp "$source_path"/.env.dist "$installation_path"
 cp "$source_path"/README.md "$installation_path"
+cp "$source_path/install.sh" "$installation_path"
+cp "$source_path/update.sh" "$installation_path"
 
 if ! [[ -e "$installation_path"/.env ]]; then
   while IFS= read -r line; do
