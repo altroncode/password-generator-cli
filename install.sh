@@ -17,15 +17,19 @@ installation_path=$1
 
 force_mode=false
 is_delete=false
+is_local_installation=false
 shift
 
-while getopts "fd" opt; do
+while getopts "fdl" opt; do
   case ${opt} in
   f)
     force_mode=true
     ;;
   d)
     is_delete=true
+    ;;
+  l)
+    is_local_installation=true
     ;;
   \?)
     echo -e "${RED}Wrong flag: -$OPTARG${RESET}"
@@ -77,10 +81,6 @@ if ! [[ -d ~/.local/bin ]]; then
   mkdir ~/.local/bin
 fi
 
-ln -sf "$installation_path"/__main__.py ~/.local/bin/password-gen
-
-# TODO
-# create .env automatically
-# add update script
-# create configparsers
-# add documentation
+if ! [[ $is_local_installation ]]; then
+  ln -sf "$installation_path"/__main__.py ~/.local/bin/password-gen
+fi
