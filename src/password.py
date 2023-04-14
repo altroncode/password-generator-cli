@@ -2,10 +2,12 @@ import random
 import secrets
 import string
 
+import config
+
 
 class PasswordFactory:
 
-    def __init__(self, settings: src.config.settings.PasswordSettings):
+    def __init__(self, settings: config.settings.PasswordSettings):
         self._settings = settings
 
     def create_password(self) -> 'Password':

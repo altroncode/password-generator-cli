@@ -1,7 +1,7 @@
 import pathlib
 
-from src.config.data_models import base_data_model
-from src.config.data_models.field import Field
+from config.data_models import base_data_model
+from config.data_models.field import Field
 
 
 APP_PATH = pathlib.Path(__file__).parent.parent

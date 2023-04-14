@@ -1,6 +1,7 @@
 import abc
 
-from src import config, password
+import config
+import password
 
 
 class BaseStorage(abc.ABC):
