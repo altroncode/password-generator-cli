@@ -18,6 +18,7 @@ if [[ -d .git ]]; then
 fi
 
 current_directory=$(dirname "$0")
+echo $current_directory
 source_directory_name=$(uuidgen)
 temporary_installation_directory_name=$(uuidgen)
 config_file_path=${current_directory}/config/settings.ini
@@ -27,7 +28,6 @@ while getopts ":c" opt; do
   c)
     old_config_path="$OPTARG"
     update_config "$config_file_path" "$old_config_path"
-    echo "$config_file_path" "$old_config_path"
     exit 0
     ;;
   \?)
