@@ -22,11 +22,11 @@ source_directory_name=$(uuidgen)
 temporary_installation_directory_name=$(uuidgen)
 config_file_path=${current_directory}/config/settings.ini
 
-while getopts ":c" opt; do
+while getopts "c:" opt; do
   case ${opt} in
   c)
     old_config_path="$OPTARG"
-    echo "$old_config_path"
+    echo $old_config_path
     update_config "$config_file_path" "$old_config_path"
     exit 0
     ;;
