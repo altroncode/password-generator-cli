@@ -94,8 +94,7 @@ class EnvDataSource(WritableDataSource):
             if line.split('=')[0] == key.env:
                 if isinstance(value_type, types.GenericAlias):
                     secondary_type = value_type.__args__[0]
-                    value = value.replace('[', '').replace(']', '')
-                    value = value.replace("'", '').replace('"', '')
+                    value = value.lstrip('[').rstrip(']')
                     return [secondary_type(j) for j in value.split(', ') if j]
                 return cast_value_to_type(value, value_type) if value != '' else None
 
