@@ -9,6 +9,8 @@ RESET='\033[0m'
 function update_config {
   local config_file_path=$1
   local old_config_path=$2
+  echo "$old_config_path"
+  echo "$config_file_path"
   mv "$old_config_path" "$(dirname "$config_file_path")/$(basename "$old_config_path").old"
 }
 
@@ -18,7 +20,6 @@ if [[ -d .git ]]; then
 fi
 
 current_directory=$(dirname "$0")
-echo $current_directory
 source_directory_name=$(uuidgen)
 temporary_installation_directory_name=$(uuidgen)
 config_file_path=${current_directory}/config/settings.ini
