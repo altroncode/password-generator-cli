@@ -1,6 +1,6 @@
 # Password Generator
 
-![](src/assets/logo.png)
+![](assets/logo.png)
 
 
 **password-generator** is an application with which 
