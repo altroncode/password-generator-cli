@@ -9,8 +9,6 @@ RESET='\033[0m'
 function update_config {
   local config_file_path=$1
   local old_config_path=$2
-  echo "$old_config_path"
-  echo "$config_file_path"
   mv "$old_config_path" "$(dirname "$config_file_path")/$(basename "$old_config_path").old"
 }
 
@@ -28,6 +26,7 @@ while getopts ":c" opt; do
   case ${opt} in
   c)
     old_config_path="$OPTARG"
+    echo "$old_config_path"
     update_config "$config_file_path" "$old_config_path"
     exit 0
     ;;
