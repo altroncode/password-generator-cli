@@ -26,7 +26,6 @@ while getopts "c:" opt; do
   case ${opt} in
   c)
     old_config_path="$OPTARG"
-    echo $old_config_path
     update_config "$config_file_path" "$old_config_path"
     exit 0
     ;;
@@ -37,11 +36,10 @@ while getopts "c:" opt; do
   esac
 done
 
-chmod +x "$current_directory"/update.sh
-
 git clone https://github.com/altroncode/password-generator-cli.git "$source_directory_name"
 
 cp "$config_file_path" "$current_directory"
+config_file_path="$current_directory"/settings.ini
 
 rm -rv !("$source_directory_name"|.env|settings.ini)
 mkdir .git
@@ -51,5 +49,9 @@ rm -rf .git
 
 bash "$current_directory/$temporary_installation_directory_name/update.sh" -c "$config_file_path"
 
-#rm -rf "$current_directory/$temporary_installation_directory_name/.env"
-#mv "$current_directory"/"$temporary_installation_directory_name"/* "$current_directory"
+rm -rf "$current_directory/$temporary_installation_directory_name/.env"
+mv "$current_directory"/"$temporary_installation_directory_name"/* "$current_directory"
+rm -rf "$source_directory_name"
+rm -rf "$temporary_installation_directory_name"
+
+chmod +x "$current_directory"/update.sh
