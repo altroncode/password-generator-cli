@@ -38,11 +38,15 @@ while getopts "fdl" opt; do
   esac
 done
 
-if $is_delete; then
+function delete_previous_installation {
   rm -rf "$installation_path"
   if [ -L ~/.local/bin/password-gen ]; then
     unlink ~/.local/bin/password-gen
   fi
+}
+
+if $is_delete; then
+  delete_previous_installation
   exit 0
 fi
 
@@ -55,7 +59,7 @@ if [[ -d "$installation_path" ]] && ! $force_mode; then
   echo -e "${RED}Directory already exists${RESET}"
   exit 1
 elif [[ -d "$installation_path" ]]; then
-  rm -rf "$installation_path"
+  delete_previous_installation
 fi
 
 cp -r "$source_path/src" "$installation_path"
@@ -67,8 +71,8 @@ cp "$source_path/update.sh" "$installation_path"
 if ! [[ -e "$installation_path"/.env ]]; then
   while IFS= read -r line; do
     key=$(echo "$line" | awk '{print $1}')
-    echo "${key%?}"= >> "$installation_path"/.env
-  done < "$source_path"/.env.dist
+    echo "${key%?}"= >>"$installation_path"/.env
+  done <"$source_path"/.env.dist
 fi
 
 chmod +x "$installation_path"/__main__.py
@@ -88,6 +92,6 @@ if ! [[ -d ~/.local/bin ]]; then
   mkdir ~/.local/bin
 fi
 
-if ! [[ $is_local_installation ]]; then
+if ! $is_local_installation; then
   ln -sf "$installation_path"/__main__.py ~/.local/bin/password-gen
 fi
