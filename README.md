@@ -29,6 +29,9 @@ It is also possible to save an already existing password
 ```bash
 password_gen --password "123abcABC@#$%^&"
 ```
+
+To archive password the following syntax are used: &lt;storage&gt;+archive
+
 For more information use password-gen -h
 
 ## Configuration
