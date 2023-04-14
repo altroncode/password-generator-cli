@@ -38,9 +38,12 @@ def main():
     }
 
     for password_saving_method in app_settings.storages:
-        strategy = password_saving_strategies.get(password_saving_method)
+        strategy = password_saving_strategies.get(password_saving_method.rstrip('+archive'))
         note_ = note.CLINoteFactory().create_note() if credentials_settings.is_note else None
-        strategy.save_password(data_source, credentials_settings, password_, note_)
+        if isinstance(strategy, password_saving_strategy.PasswordSavingStrategyWithArchive):
+            strategy.save_password(
+                data_source, credentials_settings, password_, note_, password_saving_method.endswith("+archive")
+            )
 
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ class TelegramSettings(base_data_model.BaseModel):
 
     chat_id: int = Field(env='CHAT_ID')
     token: str = Field(env='TOKEN')
-    is_archive: bool = Field()
+    is_archive: bool = Field(init=False)
     archive_chat_id: int = Field(env='TELEGRAM_ARCHIVE_CHAT_ID')
     last_message_id: int = Field(env='LAST_MESSAGE_ID')
 

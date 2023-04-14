@@ -10,13 +10,13 @@ class BaseCredentialsBuilder(typing.Protocol):
     def get_credentials(self) -> str:
         pass
 
-    def set_platform(self, platform: str) -> str:
+    def set_platform(self, platform: str) -> typing.Self:
         pass
 
-    def set_login(self, login: str) -> str:
+    def set_login(self, login: str) -> typing.Self:
         pass
 
-    def set_email(self, email: str) -> str:
+    def set_email(self, email: str) -> typing.Self:
         pass
 
 

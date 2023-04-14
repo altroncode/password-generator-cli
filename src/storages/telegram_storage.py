@@ -14,13 +14,14 @@ from storages import base_storage
 from text_processing import html_tags
 
 
-class TelegramStorage(base_storage.BaseStorage):
+class TelegramStorage(base_storage.BaseStorageWithArchive):
 
-    def __init__(self, telegram_settings: settings.TelegramSettings) -> None:
-        super().__init__(telegram_settings)
+    def __init__(self, telegram_settings: settings.TelegramSettings, is_archive: bool) -> None:
+        super().__init__(telegram_settings, is_archive)
         self.__settings = telegram_settings
         self.__base_url = f'https://api.telegram.org/bot{self.__settings.token}'
         self.__text_processing = text_processing.TelegramTextProcessing()
+        self.__is_archive = is_archive
 
     def keep(self, password_: password.Password, credentials: str, note: str = None) -> None:
         try:
@@ -30,7 +31,7 @@ class TelegramStorage(base_storage.BaseStorage):
             formatted_password = self.__text_processing.escape_text(str(password_))
             formatted_password = self.__text_processing.format_text(formatted_password, html_tags.CodeTag())
             self._send_message(formatted_password, self.__settings.chat_id)
-            if self.__settings.is_archive:
+            if self.__is_archive:
                 self._send_message(credentials_message, self.__settings.archive_chat_id)
                 self._send_message(formatted_password, self.__settings.archive_chat_id)
         except urllib.error.HTTPError as e:
