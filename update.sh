@@ -7,7 +7,9 @@ RED='\033[0;31m'
 RESET='\033[0m'
 
 function update_config {
-  mv "$2" "$(dirname "$1")/$(basename "$2").old"
+  local config_file_path=$1
+  local old_config_path=$2
+  mv "$old_config_path" "$(dirname "$config_file_path")/$(basename "$old_config_path").old"
 }
 
 if [[ -d .git ]]; then
@@ -25,6 +27,7 @@ while getopts ":c" opt; do
   c)
     old_config_path="$OPTARG"
     update_config "$config_file_path" "$old_config_path"
+    echo "$config_file_path" "$old_config_path"
     exit 0
     ;;
   \?)
@@ -48,5 +51,5 @@ rm -rf .git
 
 bash "$current_directory/$temporary_installation_directory_name/update.sh" -c "$config_file_path"
 
-rm -rf "$current_directory/$temporary_installation_directory_name/.env"
-mv "$current_directory"/"$temporary_installation_directory_name"/* "$current_directory"
+#rm -rf "$current_directory/$temporary_installation_directory_name/.env"
+#mv "$current_directory"/"$temporary_installation_directory_name"/* "$current_directory"
